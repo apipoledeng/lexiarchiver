@@ -1,0 +1,92 @@
+* {
+    font-family: 'Inter', sans-serif;
+}
+
+.login {
+    height: 100vh;
+}
+
+.login-left {
+    background: #0E4B5F;
+    color: white;
+}
+
+.img1 {
+    width: 352px;
+    height: 400px;
+    left: 186px;
+    top: 216px;
+    margin-top: 100px;
+
+    background: url(fabio-tura-eNDidEwl40g-unsplash.jpg);
+    border-radius: 30px;
+}
+
+.login-left p {
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    margin-top: 30px;
+}
+
+.header h1 {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 48px;
+
+    color: #1688AD;
+
+}
+
+.header p {
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 25px;
+    line-height: 30px;
+    margin-bottom: 50px;
+
+    color: #1688AD;
+}
+
+.login-form input {
+
+    box-sizing: border-box;
+    background: rgba(217, 217, 217, 0.13);
+    border: 1px solid #000000;
+    border-radius: 15px;
+    margin-top: 25px;
+
+
+
+}
+
+.login-form button {
+    width: 100px;
+    height: 40px;
+    margin-top: 25px;
+    background: rgba(14, 91, 116, 0.89);
+    border-radius: 15px;
+
+}
+
+.header img {
+    box-sizing: border-box;
+    width: 148px;
+    height: 139px;
+
+}
+
+.login-form img {
+    position: relative;
+    display: inline-block;
+    width: 12px;
+    height: 15.5px;
+    bottom: 23px;
+    left: 300px;
+    /* jarak dari tepi kanan */
+    transform: translateY(-50%);
+}
