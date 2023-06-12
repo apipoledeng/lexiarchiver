@@ -21,52 +21,67 @@
 
 <body>
     <section class="addsurat">
-        <div class="container col-md-6 ">
-            <div class="h-100 p-5 rounded-3">
-                <h2 class="text-center">Tambah Surat</h2>
-                <div class="form-add d-flex">
+        <div class="mycontainer ">
+            <h2 class="text-center" style="margin-top: 25px;">Tambah Surat</h2>
+            <div class="d-flex">
+                <div class="form-surat-masuk">
                     <form action="/add/inbox/save" method="POST" enctype="multipart/form-data">
-                        <div class="mb-4">
+                        <div class="row">
+                            <div class="col"></div>
+                            <div class="col"></div>
+                        </div>
+                        <div class="form-group myform-input">
                             <label class="form-label">Nama Surat</label>
-                            <input type="text" class="form-control" id="nama_surat" name="nama_surat" value="Njanjal">
+                            <input type="text" id="nama_surat" name="nama_surat" value="Njanjal" class="form-control">
                         </div>
-                        <div class="mb-4">
-                            <input type="hidden" class="form-control" name="kategori" value="SM">
+                        <div class="form-group myform-input">
+                            <input type="hidden" name="kategori" value="SM" class="form-control">
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Tanggal</label>
-                            <input type="input" id="datepikcer" class="form-control"name="tanggal">
+                        <div class="form-group myform-input">
+                            <input type="hidden" name="kategori" value="SM" class="form-control">
                         </div>
-                        <div class="mb-4">
+                        <div class="form-group myform-input">
+                            <label class="form-label">Kategori Surat</label>
+                            <select class="form-select" aria-label="Default select example" style="width: 218.64px;">
+                                <option selected>-- Kategori --</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                        <div class="form-group myform-input">
                             <label class="form-label">Pengirim</label>
-                            <input type="text" class="form-control"name="pengirim" value="kentang">
+                            <input type="text"name="pengirim" value="kentang" class="form-control">
                         </div>
-                        <div class="mb-4">
+                        <div class="form-group myform-input">
                             <label class="form-label">Perihal</label>
-                            <input type="text" class="form-control"name="perihal" value="nganu">
+                            <input type="text"name="perihal" value="nganu" class="form-control">
                         </div>
-                        <div class="mb-3">
+                        <div class="form-group myform-input">
                             <label for="lampiran" class="form-label">Lampiran</label>
-                            <input class="form-control" type="file"name="lampiran">
+                            <input type="file"name="lampiran" class="form-control">
                         </div>
-                        <div class="mb-4">
+                        <div class="myform-input">
                             <label class="form-label">Keterangan</label>
-                            <textarea class="form-control"name="keterangan" cols="30" rows="10" style="background-color: #1688ad; color: white; width: 577px;"></textarea>
+                            <textarea class="form-control"name="keterangan"></textarea>
                         </div>
-                        <div class="button d-flex align-items-center highlight-toolbar ">
-                            <div>
-                                <a href="/dashboard" class="btn1 mb-3">Cancel</a>
-                            </div>
-        
-                            <div>
-                                <button class="btn2 mb-3" type="submit">Save</button>
-                            </div>
+                        <div>
+                            <a type="reset" href='/dashboard' class="btn btn-secondary" style='width: 150px;margin-top: 5px;height: 50px;padding-top: 12px;border-radius: 50px;'>Cancel</a>
+                        </div>
+    
+                        <div>
+                            <button type="submit" class="btn2 mb-3">Save</button>
                         </div>
                     </form>
-                    <img src="{{url_for('static',filename='rectangle119.png')}}" alt="">
                 </div>
-                <hr>
+                <div class="gambar-pemanis">
+                    <img src="../static/rectangle119.png" alt="">
+                </div>
             </div>
+                <div class="form-add d-flex">
+                    <div>
+                        
+                <hr>
         </div>
     </section>
 </body>

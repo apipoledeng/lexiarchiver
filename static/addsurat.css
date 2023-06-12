@@ -2,16 +2,21 @@
     height: 100vh;
 
     position: relative;
-    width: 1440px;
-    height: 1024px;
+    width: 100%;
+    height: 720px;
 
     background-image: url('./image/addsurat.png');
 }
 
-.container {
+.form-surat-masuk{
+    width: 612px;
+    height: 400px;
+}
+
+.mycontainer {
     position: absolute;
-    width: 1332px;
-    height: 897px;
+    width: 1149px;
+    height: 575px;
     left: 108px;
     top: 65px;
     background: #FFFFFF;
@@ -31,16 +36,22 @@
     margin-top: 50px;
 }
 
-.mb-3 {
-    margin-top: 20px;
+.myform-input{
+    padding-left: 86px;
+}
+.myform-input textarea{
+    background-color: #1688ad;
+    color: white;
+    width: 577px;
+    height: 100px
 }
 
-.mb-3 input {
-    width: 343px;
-    height: 35px;
+.myform-input input {
+    width: 218.64px;
+    /* height: 30px; */
 
     background: #1688AD;
-    border-radius: 10px;
+    /* border-radius: 3px; */
     color: white;
 }
 
