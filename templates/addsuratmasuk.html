@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menambahkan Surat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/addsurat.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+</head>
+
+<body>
+    <section class="addsurat">
+        <div class="mycontainer ">
+            <h2 class="text-center" style="margin-top: 25px;">Tambah Surat</h2>
+            <div class="d-flex">
+                <div class="form-surat-masuk">
+                    <form action="/add/inbox/save" method="POST" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col"></div>
+                            <div class="col"></div>
+                        </div>
+                        <div class="form-group myform-input">
+                            <label class="form-label">Nama Surat</label>
+                            <input type="text" id="nama_surat" name="nama_surat" value="Njanjal" class="form-control">
+                        </div>
+                        <div class="form-group myform-input">
+                            <input type="hidden" name="kategori" value="SM" class="form-control">
+                        </div>
+                        <div class="form-group myform-input">
+                            <input type="hidden" name="kategori" value="SM" class="form-control">
+                        </div>
+                        <div class="form-group myform-input">
+                            <label class="form-label">Kategori Surat</label>
+                            <select class="form-select" aria-label="Default select example" style="width: 218.64px;">
+                                <option selected>-- Kategori --</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                        <div class="form-group myform-input">
+                            <label class="form-label">Pengirim</label>
+                            <input type="text"name="pengirim" value="kentang" class="form-control">
+                        </div>
+                        <div class="form-group myform-input">
+                            <label class="form-label">Perihal</label>
+                            <input type="text"name="perihal" value="nganu" class="form-control">
+                        </div>
+                        <div class="form-group myform-input">
+                            <label for="lampiran" class="form-label">Lampiran</label>
+                            <input type="file"name="lampiran" class="form-control">
+                        </div>
+                        <div class="myform-input">
+                            <label class="form-label">Keterangan</label>
+                            <textarea class="form-control"name="keterangan"></textarea>
+                        </div>
+                        <div>
+                            <a type="reset" href='/dashboard' class="btn btn-secondary" style='width: 150px;margin-top: 5px;height: 50px;padding-top: 12px;border-radius: 50px;'>Cancel</a>
+                        </div>
+    
+                        <div>
+                            <button type="submit" class="btn2 mb-3">Save</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="gambar-pemanis">
+                    <img src="../static/rectangle119.png" alt="">
+                </div>
+            </div>
+                <div class="form-add d-flex">
+                    <div>
+                        
+                <hr>
+        </div>
+    </section>
+</body>
+
+</html>

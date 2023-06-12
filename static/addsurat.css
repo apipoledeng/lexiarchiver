@@ -1,0 +1,106 @@
+.addsurat {
+    height: 100vh;
+
+    position: relative;
+    width: 100%;
+    height: 720px;
+
+    background-image: url('./image/addsurat.png');
+}
+
+.form-surat-masuk{
+    width: 612px;
+    height: 400px;
+}
+
+.mycontainer {
+    position: absolute;
+    width: 1149px;
+    height: 575px;
+    left: 108px;
+    top: 65px;
+    background: #FFFFFF;
+    border-radius: 35px;
+}
+
+.addsurat h2 {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 20px;
+
+    color: #0E4B5F;
+}
+
+.form-add {
+    margin-top: 50px;
+}
+
+.myform-input{
+    padding-left: 86px;
+}
+.myform-input textarea{
+    background-color: #1688ad;
+    color: white;
+    width: 577px;
+    height: 100px
+}
+
+.myform-input input {
+    width: 218.64px;
+    /* height: 30px; */
+
+    background: #1688AD;
+    /* border-radius: 3px; */
+    color: white;
+}
+
+.mb-4 input {
+    width: 500px;
+    height: 40px;
+    left: 129px;
+    top: 561px;
+    color: white;
+    background: #1688AD;
+    border-radius: 10px;
+}
+
+.form-select {
+    width: 343px;
+    height: 40px;
+
+    background: #1688AD;
+    border-radius: 10px;
+    color: white;
+}
+
+.form-add img {
+    width: 500px;
+    height: 636px;
+    border-radius: 43px;
+    margin-left: -200px;
+    margin-top: 30px;
+    position: relative;
+}
+
+.button {
+    margin-left: 710px;
+}
+
+.btn1 {
+    width: 150px;
+    height: 50px;
+
+    background: #D9D9D9;
+    border-radius: 50px;
+}
+
+.btn2 {
+    width: 150px;
+    height: 50px;
+
+    background: #0E4B5F;
+    border-radius: 50px;
+    margin-left: 10px;
+    color: white;
+}
