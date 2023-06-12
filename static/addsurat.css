@@ -5,7 +5,7 @@
     width: 1440px;
     height: 1024px;
 
-    background-image: url(./static/Add\ Surat.png);
+    background-image: url('./image/addsurat.png');
 }
 
 .container {
@@ -13,8 +13,7 @@
     width: 1332px;
     height: 897px;
     left: 108px;
-    top: 64px;
-
+    top: 65px;
     background: #FFFFFF;
     border-radius: 35px;
 }
@@ -50,7 +49,7 @@
     height: 40px;
     left: 129px;
     top: 561px;
-
+    color: white;
     background: #1688AD;
     border-radius: 10px;
 }
@@ -65,10 +64,10 @@
 }
 
 .form-add img {
-    width: 490px;
-    height: 595px;
-    border-radius: 98px;
-    margin-left: 50px;
+    width: 500px;
+    height: 636px;
+    border-radius: 43px;
+    margin-left: -200px;
     margin-top: 30px;
     position: relative;
 }
