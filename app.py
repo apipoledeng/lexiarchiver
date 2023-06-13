@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 import hashlib
 import jwt
 from werkzeug.utils import secure_filename
+from bson.objectid import ObjectId
 
 MONGODB_CONNECTION_STRING = "mongodb+srv://kentang:eUenw9z4QIlEoGzW@cluster0.mjce1r3.mongodb.net/?retryWrites=true&w=majority"
 client = MongoClient(MONGODB_CONNECTION_STRING)
@@ -73,9 +74,13 @@ def sign_in():
             }
         )
 
+@app.route("/list-surat-masuk")
+def list_surat_masuk():
+    list_surat = db.letters.find({'kategori':'SM'})
+    return render_template('listsuratmasuk.html', list_surat=list_surat)
 
-@app.route("/add/inbox", methods=['GET'])
-def add_inbox():
+@app.route("/add-surat-masuk", methods=['GET'])
+def add_surat_masuk():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(
@@ -87,46 +92,61 @@ def add_inbox():
         return redirect(url_for('dashboard'))
 
 
-@app.route("/add/inbox/save", methods=['POST'])
-def add_inbox_save():
+@app.route("/add-surat-masuk-save", methods=['POST'])
+def add_surat_masuk_save():
     print('Masuk')
     print(request.form)
     print(request.files)
-    # return redirect(url_for('add_inbox'))
-    # print(request.form["nama_surat_give"])
-    # print(request.form["kategori_give"])
-    # print(request.form["tanggal_give"])
-    # print(request.form["pengirim_give"])
-    # print(request.form["perihal_give"])
-    # print(request.form["lampiran_give"])
-    # print(request.form["keterangan_give"])
-    nama_surat_receiver = request.form.get('nama_surat')
+    nomor_surat_receiver = request.form.get('nomor_surat')
     kategori_receiver = request.form.get('kategori')
-    tanggal_receiver = request.form.get('tanggal')
     pengirim_receiver = request.form.get('pengirim')
+    tanggal_receiver = request.form.get('tanggal')
+    tujuan_receiver = request.form['tujuan']
+    perihal_receiver = request.form['perihal']
     lampiran_receiver = request.files['lampiran']
     keterangan_receiver = request.form.get('keterangan')
 
-    category = db.categories.find_one({'code':kategori_receiver})
+
+
+    tanggal_to_datetime = datetime.strptime(tanggal_receiver, "%Y-%m-%d")
+    print(tanggal_to_datetime)
+    datetime_to_tanggal = tanggal_to_datetime.strftime('%d-%m-%Y')
+    print(datetime_to_tanggal)
     surat = {
-        'nama_surat':nama_surat_receiver,
-        'kategori_id': category['_id'],
-        'tanggal':tanggal_receiver,
+        'nomor_surat':f'{kategori_receiver}/{nomor_surat_receiver}',
+        'kategori': kategori_receiver,
+        'tanggal':datetime_to_tanggal,
+        'tujuan': tujuan_receiver,
+        'perihal': perihal_receiver,
         'pengirim':pengirim_receiver,
         'keterangan':keterangan_receiver
     }
     if request.files != '':
         filename = secure_filename(lampiran_receiver.filename) #secure file
         extension = filename.split(".")[-1] #mengambil extension
-        file_path = f"letters/{nama_surat_receiver}-{tanggal_receiver}.{extension}" #membuat path baru
+        file_path = f"letters/{perihal_receiver}-{datetime_to_tanggal}.{extension}" #membuat path baru
         lampiran_receiver.save("./static/" + file_path) #menyimpan file
-        surat["lampiran"] = './static/'+file_path #menambah key value
+        surat["lampiran"] = file_path #menambah key value
     db.letters.insert_one(surat)
     return redirect(url_for('list_surat_masuk', msg='The letter has been successfully saved.'))
 
-@app.route("/list-surat-masuk")
-def list_surat_masuk():
-    return render_template('listsuratmasuk.html')
+
+@app.route("/surat-masuk/delete/<id>", methods=['GET'])
+def surat_masuk_delete(id):
+    db.letters.delete_one({'_id':ObjectId(id)})
+    return redirect(url_for('list_surat_masuk'))
+
+@app.route("/surat-masuk/update/<id>", methods=['GET','POST'])
+def surat_masuk_update(id):
+    obj = db.letters.find_one({'_id':ObjectId(id)})
+    obj['nomor_surat']=obj['nomor_surat'].replace("SM/",'')
+    obj['tanggal'] = '2023-05-02'
+    print(obj)
+    print(obj['tanggal'])
+    # if request.method == 'POST':
+    #     ....
+    return render_template('editsuratmasuk.html', surat=obj, id=id)
+
 
 @app.route("/list-surat-keluar")
 def list_surat_keluar():
@@ -140,17 +160,17 @@ def list_surat_pemberitahuan():
 def list_surat_pengumuman():
     return render_template('listpengumuman.html')
 
-@app.route("/editsuratmasuk")
-def edit_surat_masuk():
-    return render_template('editsuratmasuk.html')
+@app.route("/editsurat")
+def edit_surat():
+    return render_template('editsurat.html')
 
 @app.route("/edit-profile")
 def edit_profile():
     return render_template('profil-modify1.html')
 
-@app.route("/add-surat")
-def add_surat():
-    return render_template('addsuratmasuk.html')
+@app.route("/add-surat-keluar")
+def add_surat_keluar():
+    return render_template('addsuratkeluar.html')
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5008, debug=True)

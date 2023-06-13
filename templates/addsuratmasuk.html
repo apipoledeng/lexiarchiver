@@ -15,69 +15,69 @@
     
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-
 </head>
 
 <body>
     <section class="addsurat">
         <div class="mycontainer ">
-            <h2 class="text-center" style="margin-top: 25px;">Tambah Surat</h2>
-            <div class="d-flex">
-                <div class="form-surat-masuk">
-                    <form action="/add/inbox/save" method="POST" enctype="multipart/form-data">
-                        <div class="row">
-                            <div class="col"></div>
-                            <div class="col"></div>
+            <h2 class="text-center" style="margin-top: 25px;">Tambah Surat Masuk</h2>
+            <form action="/add-surat-masuk-save" method="POST" enctype="multipart/form-data">
+                <div class="d-flex">
+                    <div class="form-surat-masuk" style="padding-right: 181px;">
+                        <div class="d-flex">
+                            <div class="form1">
+                                <div class="form-group myform-input">
+                                    <label class="form-label">Nomor Surat</label>
+                                    <input type="text" id="nama_surat" name="nomor_surat" class="form-control" required="true">
+                                </div>
+                                <div class="form-group myform-input">
+                                    <label class="form-label">Kategori Surat</label>
+                                    <select class="form-select" aria-label="Default select example" name='kategori' required="true">
+                                        <option selected> ---- Kategori ---- </option>
+                                        <option value="SM">Surat Masuk</option>
+                                        <option value="SK">Surat Keluar</option>
+                                        <option value="SP">Surat Pemberitahuan</option>
+                                        <option value="SN">Surat Pengumuman</option>
+                                    </select>
+                                </div>
+                                <div class="form-group myform-input">
+                                    <label class="form-label">Pengirim</label>
+                                    <input type="text"name="pengirim" class="form-control" required="true">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group myform-input">
+                                    <label class="form-label">Tanggal</label>
+                                    <input type="date"name="tanggal" class="form-control" required="true">
+                                </div>
+                                <div class="form-group myform-input">
+                                    <label class="form-label">Ditujukan Kepada</label>
+                                    <input type="text"name="tujuan" class="form-control" required="true">
+                                </div>
+                                <div class="form-group myform-input">
+                                    <label class="form-label">Perihal</label>
+                                    <input type="text"name="perihal" class="form-control" required="true">
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group myform-input">
-                            <label class="form-label">Nama Surat</label>
-                            <input type="text" id="nama_surat" name="nama_surat" value="Njanjal" class="form-control">
-                        </div>
-                        <div class="form-group myform-input">
-                            <input type="hidden" name="kategori" value="SM" class="form-control">
-                        </div>
-                        <div class="form-group myform-input">
-                            <input type="hidden" name="kategori" value="SM" class="form-control">
-                        </div>
-                        <div class="form-group myform-input">
-                            <label class="form-label">Kategori Surat</label>
-                            <select class="form-select" aria-label="Default select example" style="width: 218.64px;">
-                                <option selected>-- Kategori --</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                        </div>
-                        <div class="form-group myform-input">
-                            <label class="form-label">Pengirim</label>
-                            <input type="text"name="pengirim" value="kentang" class="form-control">
-                        </div>
-                        <div class="form-group myform-input">
-                            <label class="form-label">Perihal</label>
-                            <input type="text"name="perihal" value="nganu" class="form-control">
-                        </div>
-                        <div class="form-group myform-input">
+                        <div class="form-group" style="padding-left: 86px;">
                             <label for="lampiran" class="form-label">Lampiran</label>
-                            <input type="file"name="lampiran" class="form-control">
+                            <input type="file"name="lampiran" class="form-control" style="width: 536px; background: #1688AD;color: white;">
                         </div>
                         <div class="myform-input">
                             <label class="form-label">Keterangan</label>
                             <textarea class="form-control"name="keterangan"></textarea>
                         </div>
-                        <div>
-                            <a type="reset" href='/dashboard' class="btn btn-secondary" style='width: 150px;margin-top: 5px;height: 50px;padding-top: 12px;border-radius: 50px;'>Cancel</a>
-                        </div>
-    
-                        <div>
-                            <button type="submit" class="btn2 mb-3">Save</button>
-                        </div>
-                    </form>
+                    </div>
+                    <div class="gambar-pemanis">
+                        <img src="../static/rectangle119.png" alt="" style="width: 328px;height: 386px;margin-left: 100px;margin-top: 3px;">
+                    </div>
                 </div>
-                <div class="gambar-pemanis">
-                    <img src="../static/rectangle119.png" alt="">
+                <div class="form-group" style="margin-left: 63%;margin-top: 47px;">
+                    <a href='/list-surat-masuk' class="btn1 btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn2 btn-primary">Save</button>
                 </div>
-            </div>
+            </form>
                 <div class="form-add d-flex">
                     <div>
                         

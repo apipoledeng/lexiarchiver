@@ -140,14 +140,14 @@
             color: #FFFFFF;
         }
 
-        .title-print button {
+        .title-print a {
             position: absolute;
             width: 174px;
             height: 45px;
             background-color: #ffff;
             border-radius: 15px;
             border: 1px solid black;
-            left: 80%;
+            left: 75%;
             top: 41%;
             align-items: center;
             text-align: center;
@@ -307,7 +307,7 @@
             <h6 class="title-jumlah">9 Letters</h6>
         </div>
         <div class="title-print">
-            <button>Print<i class="fa-solid fa-print"></i></button>
+            <a href="/add-surat-masuk" class="btn btn-light">Add Surat</a>
         </div>
     </div>
 
@@ -323,36 +323,22 @@
                 </tr>
             </thead>
             <tbody>
+                {% for l in list_surat %}
                 <tr>
-                    <th scope="row">1</th>
-                    <td>Surat Izin Tidak Masuk Sekolah</td>
-                    <td>02/06/2023</td>
-                    <td>01</td>
+                    <th scope="row">{{loop.index}}</th>
+                    <td>{{l.perihal}}</td>
                     <td>
-                        <button class="btn-rounded">delete</button>
-                        <button class="btn-rounded">update</button>
+                        {{l.tanggal}}
+                    </td>
+                    <td>
+                        {{l.nomor_surat}}
+                    </td>
+                    <td>
+                        <a class="btn btn-rounded" href="/surat-masuk/delete/{{l._id}}">delete</a>
+                        <a class="btn btn-rounded" href="/surat-masuk/update/{{l._id}}">update</a>
                     </td>
                 </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Surat Izin Tidak Masuk Sekolah</td>
-                    <td>03/06/2023</td>
-                    <td>02</td>
-                    <td>
-                        <button class="btn-rounded">delete</button>
-                        <button class="btn-rounded">update</button>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Surat Izin Tidak Masuk Sekolah</td>
-                    <td>04/06/2023</td>
-                    <td>03</td>
-                    <td>
-                        <button class="btn-rounded">delete</button>
-                        <button class="btn-rounded">update</button>
-                    </td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
