@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request, session, redirect, url_for
+from flask import Flask, render_template, jsonify, request, redirect, url_for, flash
 from pymongo import MongoClient
 from datetime import datetime, timedelta
 import hashlib
@@ -12,6 +12,7 @@ db = client.lexiarchiver
 
 app = Flask(__name__)
 SECRET_KEY = "7kU3kX2ijYQkzi4B"
+app.secret_key=SECRET_KEY
 
 @app.route("/dashboard")
 def dashboard():
@@ -77,7 +78,8 @@ def sign_in():
 @app.route("/list-surat-masuk")
 def list_surat_masuk():
     list_surat = db.letters.find({'kategori':'SM'})
-    return render_template('listsuratmasuk.html', list_surat=list_surat)
+    jumlah_surat = db.letters.count_documents({'kategori':'SM'})
+    return render_template('listsuratmasuk.html', list_surat=list_surat, jumlah_surat=jumlah_surat)
 
 @app.route("/add-surat-masuk", methods=['GET'])
 def add_surat_masuk():
@@ -109,8 +111,8 @@ def add_surat_masuk_save():
 
 
     tanggal_to_datetime = datetime.strptime(tanggal_receiver, "%Y-%m-%d")
-    print(tanggal_to_datetime)
     datetime_to_tanggal = tanggal_to_datetime.strftime('%d-%m-%Y')
+    print(tanggal_to_datetime)
     print(datetime_to_tanggal)
     surat = {
         'nomor_surat':f'{kategori_receiver}/{nomor_surat_receiver}',
@@ -128,23 +130,50 @@ def add_surat_masuk_save():
         lampiran_receiver.save("./static/" + file_path) #menyimpan file
         surat["lampiran"] = file_path #menambah key value
     db.letters.insert_one(surat)
-    return redirect(url_for('list_surat_masuk', msg='The letter has been successfully saved.'))
+    flash('The letter has been successfully saved.', 'success')
+    return redirect(url_for('list_surat_masuk'))
 
 
 @app.route("/surat-masuk/delete/<id>", methods=['GET'])
 def surat_masuk_delete(id):
     db.letters.delete_one({'_id':ObjectId(id)})
+    flash('The letter has been successfully deleted.','success')
     return redirect(url_for('list_surat_masuk'))
 
 @app.route("/surat-masuk/update/<id>", methods=['GET','POST'])
 def surat_masuk_update(id):
     obj = db.letters.find_one({'_id':ObjectId(id)})
-    obj['nomor_surat']=obj['nomor_surat'].replace("SM/",'')
-    obj['tanggal'] = '2023-05-02'
     print(obj)
-    print(obj['tanggal'])
-    # if request.method == 'POST':
-    #     ....
+    if request.method == 'POST':
+        print("Ngepost")
+        tanggal_to_datetime = datetime.strptime(request.form['tanggal'], "%Y-%m-%d")
+        datetime_to_tanggal = tanggal_to_datetime.strftime('%d-%m-%Y')
+        lampiran_receiver =request.files['lampiran']
+        if request.files != '':
+            filename = secure_filename(lampiran_receiver.filename) #secure file
+            extension = filename.split(".")[-1] #mengambil extension
+            file_path = f"letters/{request.form['perihal']}-{datetime_to_tanggal}.{extension}" #membuat path baru
+            lampiran_receiver.save("./static/" + file_path) #menyimpan file
+        else:
+            file_path=''
+        data = {
+            'nomor_surat':f"SM/{request.form['nomor_surat']}",
+            'kategori':request.form['kategori'],
+            'tanggal':datetime_to_tanggal,
+            'tujuan':request.form['tujuan'],
+            'perihal':request.form['perihal'],
+            'pengirim':request.form['pengirim'],
+            'keterangan':request.form['keterangan'],
+            'lampiran':file_path
+        }
+        db.letters.update_one({'_id':ObjectId(id)},{'$set': data})
+        flash('The letter has been successfully edited.','success')
+        return redirect(url_for('list_surat_masuk'))
+    obj['nomor_surat']=obj['nomor_surat'].replace("SM/",'')
+    date_object = datetime.strptime(obj['tanggal'], '%d-%m-%Y')
+    new_date_string = date_object.strftime('%Y-%m-%d')
+    obj['tanggal'] = new_date_string
+    print(obj['kategori'])
     return render_template('editsuratmasuk.html', surat=obj, id=id)
 
 

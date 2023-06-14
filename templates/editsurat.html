@@ -31,12 +31,18 @@
                         <div class="form-group myform-input">
                             <label class="form-label">Kategori Surat</label>
                             <select class="form-select" aria-label="Default select example">
-                                <option selected> ---- Kategori ---- </option>
-                                <option value="SM">Surat Masuk</option>
-                                <option value="SK">Surat Keluar</option>
-                                <option value="SP">Surat Pemberitahuan</option>
-                                <option value="SN">Surat Pengumuman</option>
+                                <option> ---- Kategori ---- </option>
+                                <option value="SM" {% if obj.kategori == 'SM' %}selected{% endif %}>Surat Masuk</option>
+                                <option value="SK" {% if obj.kategori == 'SK' %}selected{% endif %}>Surat Keluar</option>
+                                <option value="SP" {% if obj.kategori == 'SP' %}selected{% endif %}>Surat Pemberitahuan</option>
+                                <option value="SN" {% if obj.kategori == 'SN' %}selected{% endif %}>Surat Pengumuman</option>
                             </select>
+                            <select>
+                                <option value="option1" {% if selected_value == 'option1' %}selected{% endif %}>Option 1</option>
+                                <option value="option2" {% if selected_value == 'option2' %}selected{% endif %}>Option 2</option>
+                                <option value="option3" {% if selected_value == 'option3' %}selected{% endif %}>Option 3</option>
+                              </select>
+                              
                         </div>
                         <div class="form-group myform-input">
                             <label class="form-label">Pengirim</label>

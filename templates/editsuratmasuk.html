@@ -34,10 +34,10 @@
                                     <label class="form-label">Kategori Surat</label>
                                     <select class="form-select" aria-label="Default select example" name='kategori' required="true" value="{{surat.kategori}}">
                                         <option> ---- Kategori ---- </option>
-                                        <option value="SM">Surat Masuk</option>
-                                        <option value="SK">Surat Keluar</option>
-                                        <option value="SP">Surat Pemberitahuan</option>
-                                        <option value="SN">Surat Pengumuman</option>
+                                        <option value="SM" {% if surat.kategori == 'SM' %}selected{% endif %}>Surat Masuk</option>
+                                        <option value="SK" {% if surat.kategori == 'SK' %}selected{% endif %}>Surat Keluar</option>
+                                        <option value="SP" {% if surat.kategori == 'SP' %}selected{% endif %}>Surat Pemberitahuan</option>
+                                        <option value="SN" {% if surat.kategori == 'SN' %}selected{% endif %}>Surat Pengumuman</option>
                                     </select>
                                 </div>
                                 <div class="form-group myform-input">
@@ -66,9 +66,7 @@
                         </div>
                         <div class="myform-input">
                             <label class="form-label">Keterangan</label>
-                            <textarea class="form-control"name="keterangan">
-                                {{surat.keterangan}}
-                            </textarea>
+                            <textarea class="form-control"name="keterangan">{{surat.keterangan}}</textarea>
                         </div>
                     </div>
                     <div class="gambar-pemanis">

@@ -6,9 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Search</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
     <script src="https://kit.fontawesome.com/9fb14998a3.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600&family=Roboto&display=swap');
 
@@ -137,7 +140,7 @@
             align-items: center;
             text-align: center;
 
-            color: #FFFFFF;
+            color: #1688AD;
         }
 
         .title-print a {
@@ -167,6 +170,16 @@
             background-color: #0E4B5F;
             width: 1132px;
             height: 275px;
+            margin-bottom: 5%;
+        }
+        .list-surat-2 {
+            position: absolute;
+            border: 1px solid #0e4b5f;
+            border-radius: 15px;
+            top: 50%;
+            left: 5%;
+            bottom: 2%;
+            background-color: #0E4B5F;
             margin-bottom: 5%;
         }
 
@@ -220,22 +233,22 @@
 
         .table-striped>tbody>tr:nth-child(even)>td,
         .table-striped>tbody>tr:nth-child(even)>th {
-          background-color: #0E4B5F;
-          color: #ffff;
-          border: none;
-          font-family: "Inter", sans-serif;
-          font-weight: 400;
-          font-size: 12px;
+            background-color: #0E4B5F;
+            color: #ffff;
+            border: none;
+            font-family: "Inter", sans-serif;
+            font-weight: 400;
+            font-size: 12px;
         }
 
         .table-striped>thead>tr:nth-child(odd)>td,
         .table-striped>thead>tr:nth-child(odd)>th {
-          background-color: #0E4B5F;
-          color: #ffff;
-          border: none;
-          font-family: "Inter", sans-serif;
-          font-weight: 400;
-          font-size: 12px;
+            background-color: #0E4B5F;
+            color: #ffff;
+            border: none;
+            font-family: "Inter", sans-serif;
+            font-weight: 400;
+            font-size: 12px;
         }
 
         .fa-solid {
@@ -248,10 +261,50 @@
             color: black;
             background-color: #ffff;
         }
+        #datatable_wrapper{
+            margin-top: 17px;
+            color: white;
+        }
+        #datatable_wrapper select{
+            color: white;
+        }
+        .dataTables_length{
+            margin-top: 5px;
+            margin-left: 14px;
+            margin-bottom: 12px;
+        }
+        .dataTables_filter{
+            margin-right: 30%;
+            color: white;
+        }
+        .dataTables_filter  input{
+            background-color: white;
+            border-radius: 10px;
+            width: 400px;
+        }
+        .dataTables_info{
+            color: white;
+            margin-left: 13px;
+        }
+        #datatable_paginate a{
+            color: white;
+        }
     </style>
+    <script>
+        $(document).ready(function() {
+            $('#datatable').DataTable();
+        });
+    </script>
 </head>
 
 <body>
+    <div id="flash-messages" style="display: none;">
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+                <div>{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+    </div>
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
@@ -304,7 +357,7 @@
 
     <div class="print">
         <div class="title">
-            <h6 class="title-jumlah">9 Letters</h6>
+            <h6 class="title-jumlah">{{jumlah_surat}} Letters</h6>
         </div>
         <div class="title-print">
             <a href="/add-surat-masuk" class="btn btn-light">Add Surat</a>
@@ -312,36 +365,50 @@
     </div>
 
     <div class="list-surat">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">No.</th>
-                    <th scope="col">NAMA FILE</th>
-                    <th scope="col">TANGGAL</th>
-                    <th scope="col">NOMOR SURAT</th>
-                    <th scope="col">AKSI</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for l in list_surat %}
-                <tr>
-                    <th scope="row">{{loop.index}}</th>
-                    <td>{{l.perihal}}</td>
-                    <td>
-                        {{l.tanggal}}
-                    </td>
-                    <td>
-                        {{l.nomor_surat}}
-                    </td>
-                    <td>
-                        <a class="btn btn-rounded" href="/surat-masuk/delete/{{l._id}}">delete</a>
-                        <a class="btn btn-rounded" href="/surat-masuk/update/{{l._id}}">update</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <table class="table table-striped" id="datatable">
+        <thead>
+            <tr>
+                <th scope="col">No.</th>
+                <th scope="col">NAMA FILE</th>
+                <th scope="col">TANGGAL</th>
+                <th scope="col">NOMOR SURAT</th>
+                <th scope="col">AKSI</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for l in list_surat %}
+            <tr>
+                <th scope="row">{{loop.index}}</th>
+                <td>{{l.perihal}}</td>
+                <td>
+                    {{l.tanggal}}
+                </td>
+                <td>
+                    {{l.nomor_surat}}
+                </td>
+                <td>
+                    <a class="btn btn-secondary" href="/surat-masuk/update/{{l._id}}">Update</a>
+                    <a class="btn btn-danger" href="/surat-masuk/delete/{{l._id}}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var messagesContainer = document.getElementById('flash-messages');
+            var messages = Array.from(messagesContainer.children);
+
+            messages.forEach(function(message) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: message.textContent.trim(),
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
