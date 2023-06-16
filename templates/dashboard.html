@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=<device-width>, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Halaman Dashboard</title>
   <!--Boostrap-->
@@ -117,8 +117,8 @@
         </div>
       </div>
       <div class="navbar-text">
-        <span class="name">Daniel Kevin</span>
-        <span class="email">danielkevin@gmail.com</span>
+        <span class="name">{{user_info.first_name}} {{user_info.last_name}}</span>
+        <span class="email">{{user_info.email}}</span>
       </div>
       <a class="navbar-brand" href="/edit-profile">
         <img src="../static/profile.png" alt="Foto Profile" class="Foto Profile" />

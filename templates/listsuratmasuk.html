@@ -10,6 +10,7 @@
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
     <script src="https://kit.fontawesome.com/9fb14998a3.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -314,11 +315,27 @@
 </head>
 
 <body>
-    <div id="flash-messages" style="display: none">
-        {% with messages = get_flashed_messages() %} {% for message in messages %}
-        <div>{{ message }}</div>
-        {% endfor %} {% endwith %}
-    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            {% if category=='success' %}
+                <script>
+                    Swal.fire({
+                        icon: 'success',
+                        text: '{{ message }}'
+                    });
+                </script>
+                {% else %}
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        text: '{{ message }}'
+                    });
+                </script>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+  {% endwith %}
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
@@ -401,6 +418,7 @@
                     <td>{{l.tanggal}}</td>
                     <td>{{l.nomor_surat}}</td>
                     <td>
+                        <a class="btn btn-secondary" href="{{l.lampiran}}">Detail</a>
                         <a class="btn btn-success" href="/surat-masuk/update/{{l._id}}">Update</a>
                         <a class="btn btn-danger" href="/surat-masuk/delete/{{l._id}}">Delete</a>
                     </td>
@@ -409,21 +427,6 @@
             </tbody>
         </table>
     </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var messagesContainer = document.getElementById("flash-messages");
-            var messages = Array.from(messagesContainer.children);
-
-            messages.forEach(function (message) {
-                Swal.fire({
-                    icon: "success",
-                    title: "Success!",
-                    text: message.textContent.trim(),
-                });
-            });
-        });
-    </script>
 </body>
 
 </html>
