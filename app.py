@@ -43,10 +43,12 @@ def dashboard():
         return render_template('dashboard.html', user_info=user_info)
     except jwt.ExpiredSignatureError:
         msg = 'Your token has expired'
-        return redirect(url_for('login', msg=msg))
+        flash(msg,'error')
+        return redirect(url_for('login'))
     except jwt.exceptions.DecodeError:
         msg = 'There was a problem a logging you in'
-        return redirect(url_for('login', msg=msg))
+        flash(msg,'error')
+        return redirect(url_for('login'))
     
 
 @app.route("/login", methods=['GET'])
