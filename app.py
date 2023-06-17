@@ -3,6 +3,7 @@ from pymongo import MongoClient
 from datetime import datetime, timedelta
 import hashlib
 import jwt
+from werkzeug.utils import secure_filename
 
 MONGODB_CONNECTION_STRING = "mongodb+srv://kentang:eUenw9z4QIlEoGzW@cluster0.mjce1r3.mongodb.net/?retryWrites=true&w=majority"
 client = MongoClient(MONGODB_CONNECTION_STRING)
@@ -70,6 +71,43 @@ def sign_in():
                 "msg": "Invalid username or password. Please try again.",
             }
         )
+
+
+@app.route("/update_profile", methods=['POST'])
+def update_profile():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        username = payload['id']
+        first_name = request.form.get('first_name')
+        last_name = request.form.get('last_name')
+        city = request.form.get('city')
+        bio = request.form.get('bio')
+        email = request.form.get('email')
+        phone = request.form.get('nophone')
+        
+        new_doc = {
+            'first_name': first_name,
+            'last_name': last_name,
+            'city': city,
+            'bio': bio,
+            'email': email,
+            'nophone': phone
+        }
+        
+        if 'file_give' in request.files:
+            file = request.files['file_give']
+            filename = secure_filename(file.filename)
+            extension = filename.split('.')[-1]
+            file_path = f'profile_pics/{username}.{extension}'
+            file.save('./static/' + file_path)
+            new_doc['profile_pic'] = filename
+            new_doc['profile_pic_real'] = file_path
+        
+        db.users.update_one({'username': payload['id']}, {'$set': new_doc})
+        return jsonify({'result': 'success', 'msg': 'Profile updated!'})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for('home'))
 
 
 if __name__ == '__main__':
