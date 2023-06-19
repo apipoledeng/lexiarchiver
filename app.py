@@ -6,27 +6,19 @@ import jwt
 from werkzeug.utils import secure_filename
 from bson.objectid import ObjectId
 import os
+import tempfile
 
 MONGODB_CONNECTION_STRING = "mongodb+srv://kentang:eUenw9z4QIlEoGzW@cluster0.mjce1r3.mongodb.net/?retryWrites=true&w=majority"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 client = MongoClient(MONGODB_CONNECTION_STRING)
 db = client.lexiarchiver
 
 app = Flask(__name__)
+# app.config['UPLOAD_FOLDER'] = './static/ngetes/'
 SECRET_KEY = "7kU3kX2ijYQkzi4B"
 app.secret_key=SECRET_KEY
 
 ALLOWED_FILE = ['docx','doc', 'pdf']
-
-
-# def get_file_size(file_path):
-#     # Check if the file exists
-#     if os.path.exists(file_path):
-#         # Get the file size in bytes
-#         file_size = os.path.getsize(file_path)
-#         return file_size
-#     else:
-#         return None
-
 
 @app.route("/dashboard")
 def dashboard():
@@ -126,61 +118,144 @@ def add_surat_masuk_save():
     keterangan_receiver = request.form.get('keterangan')
 
 
-    #ambil path dari file
-    path_surat = ''
+    #simpan file di tmp/foo
+    lampiran_receiver.save('/tmp/foo')
+    #akses dan cek ukuran file pada tmp/foo dir
+    file_size = os.stat('/tmp/foo').st_size
+    extension_surat = lampiran_receiver.filename.split(".")[-1]
     #cek ukuan file
-    ukuran_surat = os.path.getsize(lampiran_receiver.filename)
-    print(ukuran_surat)
-    print(type(ukuran_surat))
+    if file_size <= 5*1000*1000:
+        #cek extensi
+        if extension_surat not in ALLOWED_FILE:
+            flash('The file must be .docs, .doc, and .pdf ', 'error')
+            return redirect(url_for('list_surat_masuk'))
+        #simpan surat
+        tanggal_to_datetime = datetime.strptime(tanggal_receiver, "%Y-%m-%d")
+        datetime_to_tanggal = tanggal_to_datetime.strftime('%d-%m-%Y')
+        print(tanggal_to_datetime)
+        print(datetime_to_tanggal)
+        surat = {
+            'nomor_surat':f'{kategori_receiver}/{nomor_surat_receiver}',
+            'kategori': kategori_receiver,
+            'tanggal':datetime_to_tanggal,
+            'tujuan': tujuan_receiver,
+            'perihal': perihal_receiver,
+            'pengirim':pengirim_receiver,
+            'keterangan':keterangan_receiver
+        }
+        print(lampiran_receiver)
+        filename = secure_filename(lampiran_receiver.filename) #secure file
+        file_path = f"letters/{kategori_receiver}_{nomor_surat_receiver}_{datetime_to_tanggal}_{filename}" #membuat path baru
+        lampiran_receiver.save(os.path.join(BASE_DIR+'/lexiarchiver/static/', file_path)) #menyimpan file
+        surat["lampiran"] = file_path #menambah key value
+        db.letters.insert_one(surat)
+        flash('The letter has been successfully saved.', 'success')
+        return redirect(url_for('list_surat_masuk'))
+    else:
+        flash('The file size exceeds 5 Mb.', 'error')
+        return redirect(url_for('list_surat_masuk'))
+    
+
     #ambil extention surat
-    filename = secure_filename(lampiran_receiver.filename)
-    extension_surat = filename.split(".")[-1]
+    # filename = secure_filename(lampiran_receiver.filename)
+    # extension_surat = filename.split(".")[-1]
     #jika file extension in Allowed_file
-    if extension_surat in ALLOWED_FILE:
+    # if extension_surat in ALLOWED_FILE:
         #lanjutkan proses
         #jika ukuran file < 5 Mb
-        if ukuran_surat < 5242880:
-            #lanjutkan proses
-            tanggal_to_datetime = datetime.strptime(tanggal_receiver, "%Y-%m-%d")
-            datetime_to_tanggal = tanggal_to_datetime.strftime('%d-%m-%Y')
-            print(tanggal_to_datetime)
-            print(datetime_to_tanggal)
-            surat = {
-                'nomor_surat':f'{kategori_receiver}/{nomor_surat_receiver}',
-                'kategori': kategori_receiver,
-                'tanggal':datetime_to_tanggal,
-                'tujuan': tujuan_receiver,
-                'perihal': perihal_receiver,
-                'pengirim':pengirim_receiver,
-                'keterangan':keterangan_receiver
-            }
-            if request.files != '':
-                filename = secure_filename(lampiran_receiver.filename) #secure file
-                extension = filename.split(".")[-1] #mengambil extension
-                file_path = f"letters/{perihal_receiver}-{datetime_to_tanggal}.{extension}" #membuat path baru
-                lampiran_receiver.save("./static/" + file_path) #menyimpan file
-                surat["lampiran"] = file_path #menambah key value
-            db.letters.insert_one(surat)
-            flash('The letter has been successfully saved.', 'success')
-            return redirect(url_for('list_surat_masuk'))
-        else:
-            #kirim alert message bahwa file melebihi batas
-            flash('The file size exceeds 5 Mb.', 'error')
-            return redirect(url_for('list_surat_masuk'))
+    # tanggal_to_datetime = datetime.strptime(tanggal_receiver, "%Y-%m-%d")
+    # datetime_to_tanggal = tanggal_to_datetime.strftime('%d-%m-%Y')
+    # print(tanggal_to_datetime)
+    # print(datetime_to_tanggal)
+    # surat = {
+    #     'nomor_surat':f'{kategori_receiver}/{nomor_surat_receiver}',
+    #     'kategori': kategori_receiver,
+    #     'tanggal':datetime_to_tanggal,
+    #     'tujuan': tujuan_receiver,
+    #     'perihal': perihal_receiver,
+    #     'pengirim':pengirim_receiver,
+    #     'keterangan':keterangan_receiver
+    # }
+    # if request.files != '':
+    #     filename = secure_filename(lampiran_receiver.filename) #secure file
+    #     extension = filename.split(".")[-1] #mengambil extension
+    #     file_path = f"letters/{perihal_receiver}-{datetime_to_tanggal}.{extension}" #membuat path baru
+    #     # lampiran_receiver.save(f"{BASE_DIR}/static/" + file_path) #menyimpan file
+    #     # lampiran_receiver.save(os.path.join(BASE_DIR, 'static/letters/'), filename) #menyimpan file
+    #     lampiran_receiver.save('./static/letters/', filename) #menyimpan file
+    #     surat["lampiran"] = file_path #menambah key value
+    # db.letters.insert_one(surat)
+    # flash('The letter has been successfully saved.', 'success')
+    # return redirect(url_for('list_surat_masuk'))
     #jika tidak
-    else:
+    # else:
         #kirim pesan "Pastikan file yang anda kirim memiliki extensi .docs atau pdf"
-        flash('Make sure the file you send has the docx, doc or pdf extension', 'error')
-        return redirect(url_for('list_surat_masuk'))
+        # flash('Make sure the file you send has the docx, doc or pdf extension', 'error')
+        # return redirect(url_for('list_surat_masuk'))
 
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_FILE
 
 @app.route("/test", methods=['GET','POST'])
 def test():
     if request.method=='POST':
+        # tem_file = tempfile.gettempdir()
+        # return f'Temporary dir : {tem_file}'
+        print(request.files)
+
+        # file = request.files['fileku']
+
         file = request.files['fileku']
-        file_size = os.path.getsize(file.filename)
-        if file_size > 1024 * 1024:  # 1MB
-            return 'File size exceeds the limit.'
+        filename = secure_filename('a'+file.filename)
+        extension_surat = file.filename.split(".")[-1]
+        print(file)
+        print(filename)
+        print(extension_surat)
+        # file.save('./static/ngetes/')
+        file.save(
+            os.path.join(BASE_DIR+'/lexiarchiver/static/ngetes/',
+                          filename))
+        return redirect('/test')
+
+
+        # print(request.files['fileku'])
+        # file = request.files['fileku']
+        # file.save('/tmp/foo')
+        # file_size = os.stat('/tmp/foo').st_size
+        # extension_surat = file.filename.split(".")[-1]
+        # if file_size <= 5 * 1000 * 1000:
+        #     file.save('/static/test/', file.filename)
+        #     message = 'Success'
+        #     if extension_surat not in ALLOWED_FILE:
+        #         message = 'Extensi salah'
+        # else:
+        #     message = f'Your file is more than 5Mb. Size {file_size}'
+        # print(file_size)
+        # return render_template('test.html', msg=message)
+    
+
+
+
+
+    #     # file_size = get_file_size(file)
+    #     if 'file' not in request.files:
+    #         flash('No file part')
+    #         return redirect(request.url)
+    #     file = request.files['fileku']
+    #     if file.filename == '':
+    #         flash('No selected file')
+    #         return redirect(request.url)
+    #     if file and allowed_file(file.filename):
+    #         filename = secure_filename(file.filename)
+    #         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    #         return redirect(url_for('test', name=filename))
+        # file = request.files['file']
+        # file_size = file.content_length
+        # print(file_size)
+        # if file_size > 1024 * 1024:  # 1MB
+        #     return 'File size exceeds the limit.'
         # flash('error:This is an error message')
     return render_template('test.html')
 

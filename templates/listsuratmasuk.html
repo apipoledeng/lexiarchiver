@@ -407,6 +407,7 @@
                     <th scope="col">NAMA FILE</th>
                     <th scope="col">TANGGAL</th>
                     <th scope="col">NOMOR SURAT</th>
+                    <th scope="col">LAMPIRAN SURAT</th>
                     <th scope="col">AKSI</th>
                 </tr>
             </thead>
@@ -417,6 +418,7 @@
                     <td>{{l.perihal}}</td>
                     <td>{{l.tanggal}}</td>
                     <td>{{l.nomor_surat}}</td>
+                    <td>{{l.lampiran}}</td>
                     <td>
                         <a class="btn btn-secondary" href="{{l.lampiran}}">Detail</a>
                         <a class="btn btn-success" href="/surat-masuk/update/{{l._id}}">Update</a>
