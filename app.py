@@ -589,5 +589,22 @@ def surat_pengumuman_update(id):
     return render_template('editsuratpengumuman.html', surat=obj, id=id)
 
 
+@app.route("/profile")
+def profile():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(
+            token_receive, SECRET_KEY,algorithms=['HS256']
+        )
+        user_info=db.users.find_one({'username':payload.get('id')})
+        return render_template('profil.html',user_info=user_info)
+    except(jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for('dashboard'))
+
+
+@app.route("/edit-profile")
+def edit_profile():
+    pass
+
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5008, debug=True)
