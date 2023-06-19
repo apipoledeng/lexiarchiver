@@ -1,0 +1,106 @@
+* {
+    font-family: 'Inter', sans-serif;
+}
+
+.profil {
+    height: 150vh;
+    background: #0E4B5F;
+    color: white;
+
+}
+
+
+
+.nav-link {
+    color: white;
+}
+
+.profil-nav img {
+    width: 60px;
+    height: 60px;
+    margin-left: 10px;
+}
+
+.username-nav {
+    margin-left: 100px;
+    font-size: 15px;
+    line-height: 10px;
+    margin-top: 10px;
+}
+
+.container {
+    width: 1950px;
+    height: 700px;
+    margin-top: 0px;
+    position: relative;
+
+
+    background: #FFFFFF;
+    border-radius: 15px;
+    color: black;
+}
+
+.image img {
+    width: 450px;
+    height: 700px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+
+
+}
+
+.personal {
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 10px;
+    margin-left: 100px;
+    margin-top: 20px;
+    position: absolute;
+
+
+    color: #000000;
+
+}
+
+.personal p {
+    margin-left: 530px;
+    margin-top: 20px;
+}
+
+.img2 {
+    position: relative;
+    left: 700px;
+    top: 100px;
+}
+
+.img2 img {
+    width: 200px;
+    height: 200px;
+}
+
+
+.container1 {
+    margin-left: 350px;
+    top: 300px;
+    left: 200px;
+    position: absolute;
+    color: rgba(42, 77, 190, 0.95);
+    font-family: 'Roboto';
+    font-size: 16px;
+
+}
+
+.label {
+    color: rgba(42, 77, 190, 0.39);
+
+}
+
+.btn {
+    margin-top: 30px;
+    margin-right: 50px;
+
+}
