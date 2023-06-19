@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <form action="/test", method="POST" enctype="multipart/form-data">
+        <label for="">File</label>
+        <input type="file" id="fileInput" onchange="handleFileChange(event)">
+        <!-- <button onclick="">Submit</button> -->
+    </form>
+
+    <script>
+        function handleFileChange(event) {
+            const fileInput = event.target;
+            const files = fileInput.files;
+          
+            if (files.length > 0) {
+              const file = files[0];
+              const directoryPath = file.webkitRelativePath
+                ? file.webkitRelativePath.replace(file.name, '')
+                : '';
+          
+              console.log('Directory Path:', directoryPath);
+            }
+          }
+    </script>
+    
+</body>
+</html>

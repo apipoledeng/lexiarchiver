@@ -5,7 +5,7 @@
     width: 1440px;
     height: 1024px;
 
-    background-image: url(./static/Add\ Surat.png);
+    background-image: url('../static/image/addsurat.png');
 }
 
 .container {

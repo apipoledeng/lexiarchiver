@@ -15,6 +15,29 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <style>
+        .container-profile{
+            width: 1108px;
+            height: 558px;
+            margin-left: 86px;
+            margin-right: 86px;
+        }
+        .left-image{
+            width: 372px;
+            height: 558px;
+        }
+    </style>
+    <script>
+        function sign_out() {
+            $.removeCookie("mytoken", { path: "/" });
+            alert("Logged out!");
+            window.location.href = "/login";
+        }
+
+    </script>
 </head>
 
 <body>
@@ -32,9 +55,10 @@
                 
             </header>
             <div class="profil-nav col-3 d-flex justify-content-right" style="padding-left: 282px;">
-                <a href="#">
-                    <p style="color: white;">Logout</p>
-                </a>
+                <button onclick="sign_out()">Logout</button>
+                <!-- <a onclick="sign_out()">
+                    Logout
+                </a> -->
             </div>
         </div>
         <div class="container d-flex">
@@ -46,7 +70,7 @@
                     <p>Personal Information</p>
                 </div>
                 <div class="img2">
-                    <img src="../static/Ellipse_3.png" alt="">
+                    <img src="../static/profile_placeholder.png" alt="">
                 </div>
 
             </div>
@@ -54,36 +78,35 @@
             <div class="container1 start-align mt-2">
                 <div class="row g-2">
                     <div class="d-flex flex-row-reverse">
-                        <button class="btn btn-success"><i class="fas fa-pencil-alt"></i></button>
+                        <a href="#" class="btn btn-success"><i class="fas fa-pencil-alt"></i></a>
                     </div>
                     <div class="col-5">
                         <div class="label">First Name</div>
-                        <h4><b>Daniel</b></h4>
+                        <h4><b>{{user_info.first_name}}</b></h4>
                     </div>
                     <div class="col-6">
                         <div class="label">Last Name</div>
-                        <h4><b>Kevin</b></h4>
+                        <h4><b>{{user_info.last_name}}</b></h4>
                     </div>
                     <div class="col-5">
                         <div class="label">Phone</div>
-                        <h4><b>+62 890000000</b></h4>
+                        <h4><b>+62 {{user_info.phone}}</b></h4>
                     </div>
                     <div class="col-6">
                         <div class="label">Email Addres</div>
-                        <h4><b>danielkevin@gmail.com</b></h4>
+                        <h4><b>{{user_info.email}}</b></h4>
                     </div>
                     <div class="col-5">
                         <div class="label">City</div>
-                        <h4><b>Malang</b></h4>
+                        <h4><b>{{user_info.city}}</b></h4>
                     </div>
                     <div class="col-6">
                         <div class="label">Bio</div>
-                        <h4><b>Software Enginer</b></h4>
+                        <h4><b>{{user_info.bio}}r</b></h4>
                     </div>
                 </div>
             </div>
         </div>
-        
 
     </section>
 

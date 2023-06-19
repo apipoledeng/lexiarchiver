@@ -5,72 +5,75 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Surat</title>
+    <title>Menambahkan Surat</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{url_for('static',filename='editsurat.css')}}">
+    <link rel="stylesheet" href="../static/addsurat.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap" rel="stylesheet">
-
-
-
+    
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
     <section class="addsurat">
-        <div class="container col-md-6 ">
-            <div class="h-100 p-5 rounded-3">
-                <h2 class="text-center">Edit Surat</h2>
-                <div class="form-add d-flex">
-                    <form>
-                        <div class="mb-3">
-                            <label class="form-label">Nomor Surat</label>
-                            <input type="text" class="form-control" id="">
+        <div class="mycontainer ">
+            <h2 class="text-center" style="margin-top: 25px;">Edit Surat</h2>
+            <form action="/add/inbox/save" method="POST" enctype="multipart/form-data">
+                <div class="d-flex">
+                    <div class="form-surat-masuk" style="padding-right: 181px;">
+                        <div class="form-group myform-input">
+                            <label class="form-label">Nama Surat</label>
+                            <input type="text" id="nama_surat" name="nama_surat" class="form-control">
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Tanggal</label>
-                            <input type="text" class="form-control" id="">
-                        </div>
-                        <div class="select">
+                        <div class="form-group myform-input">
                             <label class="form-label">Kategori Surat</label>
                             <select class="form-select" aria-label="Default select example">
-                                <option selected>Open this select Category</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                                <option> ---- Kategori ---- </option>
+                                <option value="SM" {% if obj.kategori == 'SM' %}selected{% endif %}>Surat Masuk</option>
+                                <option value="SK" {% if obj.kategori == 'SK' %}selected{% endif %}>Surat Keluar</option>
+                                <option value="SP" {% if obj.kategori == 'SP' %}selected{% endif %}>Surat Pemberitahuan</option>
+                                <option value="SN" {% if obj.kategori == 'SN' %}selected{% endif %}>Surat Pengumuman</option>
                             </select>
+                            <select>
+                                <option value="option1" {% if selected_value == 'option1' %}selected{% endif %}>Option 1</option>
+                                <option value="option2" {% if selected_value == 'option2' %}selected{% endif %}>Option 2</option>
+                                <option value="option3" {% if selected_value == 'option3' %}selected{% endif %}>Option 3</option>
+                              </select>
+                              
                         </div>
-                        <div class="mb-3">
-                            <label for="formFile" class="form-label">File Surat</label>
-                            <input class="form-control" type="file" id="formFile">
+                        <div class="form-group myform-input">
+                            <label class="form-label">Pengirim</label>
+                            <input type="text"name="pengirim" class="form-control">
                         </div>
-                        <div class="mb-4">
-                            <label class="form-label">Ditujukan Kepada</label>
-                            <input type="text" class="form-control" id="">
-                        </div>
-                        <div class="mb-4">
+                        <div class="form-group myform-input">
                             <label class="form-label">Perihal</label>
-                            <input type="text" class="form-control" id="">
+                            <input type="text"name="perihal" class="form-control">
                         </div>
-                        <div class="mb-4">
+                        <div class="form-group myform-input">
+                            <label for="lampiran" class="form-label">Lampiran</label>
+                            <input type="file"name="lampiran" class="form-control">
+                        </div>
+                        <div class="myform-input">
                             <label class="form-label">Keterangan</label>
-                            <input type="text" class="form-control" id="">
+                            <textarea class="form-control"name="keterangan"></textarea>
                         </div>
-                    </form>
-                    <img src="" alt="{{url_for('static',filename='Rectangle 119.png')}}">
+                    </div>
+                    <div class="gambar-pemanis">
+                        <img src="../static/rectangle119.png" alt="" style="width: 328px;height: 386px;margin-left: 100px;margin-top: 3px;">
+                    </div>
                 </div>
+                <div class="form-group" style="margin-left: 63%;margin-top: 47px;">
+                    <a href='/dashboard' class="btn1 btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn2 btn-primary">Save</button>
+                </div>
+            </form>
+                <div class="form-add d-flex">
+                    <div>
+                        
                 <hr>
-                <div class="button d-flex align-items-center highlight-toolbar ">
-                    <div>
-                        <button type="reset" class="btn1 mb-3">Cancel</button>
-                    </div>
-
-                    <div>
-                        <button type="submit" class="btn2 mb-3">Save</button>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 </body>

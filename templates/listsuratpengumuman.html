@@ -347,7 +347,7 @@
                 <div class="navbar-nav">
                     <a class="nav-link" aria-current="page" href="/dashboard">Dashboard</a>
                     <a class="nav-link" href="/list-surat-masuk">Surat Masuk</a>
-                    <a class="nav-link active" href="/list-surat-keluar">Surat Keluar</a>
+                    <a class="nav-link" href="/list-surat-keluar">Surat Keluar</a>
                     <a class="nav-link" href="/list-surat-pemberitahuan">Pemberitahuan</a>
                     <a class="nav-link" href="/list-surat-pengumuman">Pengumuman</a>
                     <a class="nav-link" href="#">Search</a>
@@ -392,7 +392,7 @@
             <h6 class="title-jumlah">{{jumlah_surat}} Letters</h6>
         </div>
         <div class="title-print">
-            <a href="/add-surat-masuk" class="btn btn-light">Add Surat</a>
+            <a href="/add-surat-pengumuman" class="btn btn-light">Add Surat</a>
         </div>
     </div>
 
@@ -422,8 +422,8 @@
                     <td>{{l.lampiran}}</td>
                     <td>
                         <a class="btn btn-secondary" href="{{l.lampiran}}">Detail</a>
-                        <a class="btn btn-success" href="/surat-masuk/update/{{l._id}}">Update</a>
-                        <a class="btn btn-danger" href="/surat-masuk/delete/{{l._id}}">Delete</a>
+                        <a class="btn btn-success" href="/surat-pengumuman/update/{{l._id}}">Update</a>
+                        <a class="btn btn-danger" href="/surat-pengumuman/delete/{{l._id}}">Delete</a>
                     </td>
                 </tr>
                 {% endfor %}
