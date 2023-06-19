@@ -8,9 +8,14 @@
     <title>Search</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
     <script src="https://kit.fontawesome.com/9fb14998a3.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600&family=Roboto&display=swap');
+        @import url("https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600&family=Roboto&display=swap");
 
         body {
             background-color: #ffff;
@@ -34,7 +39,7 @@
             text-align: center;
             font-family: "Inter", sans-serif;
             font-weight: 400;
-            font-size: 14px;
+            font-size: small;
         }
 
         .navbar-nav .nav-link:active {
@@ -45,7 +50,7 @@
             position: absolute;
             left: 4%;
             top: 20%;
-            font-family: 'Roboto', sans-serif;
+            font-family: "Roboto", sans-serif;
             color: #ffff;
         }
 
@@ -53,7 +58,7 @@
             position: absolute;
             left: 36.5%;
             top: 20%;
-            font-family: 'Roboto', sans-serif;
+            font-family: "Roboto", sans-serif;
             color: #ffff;
         }
 
@@ -76,7 +81,7 @@
             left: 50%;
             top: 50%;
 
-            background: #FFFFFF;
+            background: #ffffff;
             border: 1px solid #000000;
             border-radius: 15px;
             display: flex;
@@ -112,7 +117,7 @@
             text-align: center;
             color: #ffff;
 
-            background: #32C57E;
+            background: #32c57e;
             border-radius: 15px;
             display: flex;
             justify-content: center;
@@ -128,7 +133,7 @@
             left: 5%;
             top: 40%;
 
-            font-family: 'Inter';
+            font-family: "Inter";
             font-style: normal;
             font-weight: 700;
             font-size: 20px;
@@ -137,21 +142,21 @@
             align-items: center;
             text-align: center;
 
-            color: #FFFFFF;
+            color: #1688ad;
         }
 
-        .title-print button {
+        .title-print a {
             position: absolute;
             width: 174px;
             height: 45px;
             background-color: #ffff;
             border-radius: 15px;
             border: 1px solid black;
-            left: 80%;
+            left: 75%;
             top: 41%;
             align-items: center;
             text-align: center;
-            font-family: 'Roboto';
+            font-family: "Roboto";
             font-style: normal;
             font-weight: 400;
             font-size: 20px;
@@ -164,9 +169,20 @@
             top: 50%;
             left: 5%;
             bottom: 2%;
-            background-color: #0E4B5F;
+            background-color: #0e4b5f;
             width: 1132px;
             height: 275px;
+            margin-bottom: 5%;
+        }
+
+        .list-surat-2 {
+            position: absolute;
+            border: 1px solid #0e4b5f;
+            border-radius: 15px;
+            top: 50%;
+            left: 5%;
+            bottom: 2%;
+            background-color: #0e4b5f;
             margin-bottom: 5%;
         }
 
@@ -197,46 +213,46 @@
             transform: translate(-37%, 8%);
         }
 
-        .table {
-            margin-top: 10px;
-            align-items: center;
-            text-align: center;
-            font-family: "Inter", sans-serif;
-            font-style: normal;
-            font-weight: 400;
-            font-size: 12px;
-        }
+        /* .table {
+        margin-top: 10px;
+        align-items: center;
+        text-align: center;
+        font-family: "Inter", sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+      } */
 
-        .table-striped>tbody>tr:nth-child(odd)>td,
-        .table-striped>tbody>tr:nth-child(odd)>th {
-            background-color: #0B3948;
-            color: #ffff;
-            border: none;
-            font-family: "Inter", sans-serif;
-            font-style: normal;
-            font-weight: 400;
-            font-size: 12px;
-        }
+        /* .table-striped > tbody > tr:nth-child(odd) > td,
+      .table-striped > tbody > tr:nth-child(odd) > th {
+        background-color: #0b3948;
+        color: #ffff;
+        border: none;
+        font-family: "Inter", sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+      }
 
-        .table-striped>tbody>tr:nth-child(even)>td,
-        .table-striped>tbody>tr:nth-child(even)>th {
-          background-color: #0E4B5F;
-          color: #ffff;
-          border: none;
-          font-family: "Inter", sans-serif;
-          font-weight: 400;
-          font-size: 12px;
-        }
+      .table-striped > tbody > tr:nth-child(even) > td,
+      .table-striped > tbody > tr:nth-child(even) > th {
+        background-color: #0e4b5f;
+        color: #ffff;
+        border: none;
+        font-family: "Inter", sans-serif;
+        font-weight: 400;
+        font-size: 12px;
+      }
 
-        .table-striped>thead>tr:nth-child(odd)>td,
-        .table-striped>thead>tr:nth-child(odd)>th {
-          background-color: #0E4B5F;
-          color: #ffff;
-          border: none;
-          font-family: "Inter", sans-serif;
-          font-weight: 400;
-          font-size: 12px;
-        }
+      .table-striped > thead > tr:nth-child(odd) > td,
+      .table-striped > thead > tr:nth-child(odd) > th {
+        background-color: #0e4b5f;
+        color: #ffff;
+        border: none;
+        font-family: "Inter", sans-serif;
+        font-weight: 400;
+        font-size: 12px;
+      } */
 
         .fa-solid {
             margin-left: 75px;
@@ -248,10 +264,79 @@
             color: black;
             background-color: #ffff;
         }
+
+        #datatable_wrapper {
+            margin-top: 17px;
+            color: white;
+        }
+
+
+        .dataTables_length {
+            margin-top: 5px;
+            margin-left: 14px;
+            margin-bottom: 12px;
+        }
+
+        .dataTables_filter {
+            margin-right: 30%;
+            color: white;
+        }
+
+        .dataTables_filter input {
+            background-color: white;
+            border-radius: 10px;
+            width: 400px;
+        }
+
+        .dataTables_info {
+            color: white;
+            margin-left: 13px;
+        }
+
+        #datatable_paginate a {
+            color: white;
+        }
+
+        .surat-list {
+            margin-top: 250px;
+            background-color: #0e4b5f;
+            padding-top: 15px;
+            border-radius: 15px;
+            width: 1132px;
+            margin-left: 60px;
+            padding-left: 36px;
+            padding-right: 36px;
+        }
     </style>
+    <script>
+        $(document).ready(function () {
+            $("#datatable").DataTable();
+        });
+    </script>
 </head>
 
 <body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    {% if category=='success' %}
+    <script>
+        Swal.fire({
+            icon: 'success',
+            text: '{{ message }}'
+        });
+    </script>
+    {% else %}
+    <script>
+        Swal.fire({
+            icon: 'error',
+            text: '{{ message }}'
+        });
+    </script>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
@@ -269,8 +354,8 @@
                 </div>
             </div>
             <div class="navbar-text">
-                <span class="name">Daniel Kevin</span>
-                <span class="email">danielkevin@gmail.com</span>
+                <span class="name">{{user_info.first_name}} {{user_info.last_name}}</span>
+                <span class="email">{{user_info.email}}</span>
             </div>
             <a class="navbar-brand" href="#">
                 <img src="../static/profile.png" alt="Foto Profile" class="Foto Profile" />
@@ -287,11 +372,11 @@
                 <div class="row gx- m-5">
                     <div class="col">
                         <input class="form-control1 form-control-sm p-3" type="date"
-                            aria-label=".form-control-sm example">
+                            aria-label=".form-control-sm example" />
                     </div>
                     <div class="col">
                         <input class="form-control2 form-control-sm p-3" type="date"
-                            aria-label=".form-control-sm example">
+                            aria-label=".form-control-sm example" />
                     </div>
                 </div>
             </div>
@@ -304,55 +389,44 @@
 
     <div class="print">
         <div class="title">
-            <h6 class="title-jumlah">9 Letters</h6>
+            <h6 class="title-jumlah">{{jumlah_surat}} Letters</h6>
         </div>
         <div class="title-print">
-            <button>Print<i class="fa-solid fa-print"></i></button>
+            <a href="/add-surat-pemberitahuan" class="btn btn-light">Add Surat</a>
         </div>
     </div>
 
-    <div class="list-surat">
-        <table class="table table-striped">
+    <!-- <div class="list-surat">
+        
+
+    </div> -->
+    <div class="surat-list">
+        <table class="table table-striped" id="datatable">
             <thead>
                 <tr>
                     <th scope="col">No.</th>
                     <th scope="col">NAMA FILE</th>
                     <th scope="col">TANGGAL</th>
                     <th scope="col">NOMOR SURAT</th>
+                    <th scope="col">LAMPIRAN SURAT</th>
                     <th scope="col">AKSI</th>
                 </tr>
             </thead>
             <tbody>
+                {% for l in list_surat %}
                 <tr>
-                    <th scope="row">1</th>
-                    <td>Surat Izin Tidak Masuk Sekolah</td>
-                    <td>02/06/2023</td>
-                    <td>01</td>
+                    <th scope="row">{{loop.index}}</th>
+                    <td>{{l.perihal}}</td>
+                    <td>{{l.tanggal}}</td>
+                    <td>{{l.nomor_surat}}</td>
+                    <td>{{l.lampiran}}</td>
                     <td>
-                        <button class="btn-rounded">delete</button>
-                        <button class="btn-rounded">update</button>
+                        <a class="btn btn-secondary" href="{{l.lampiran}}">Detail</a>
+                        <a class="btn btn-success" href="/surat-pemberitahuan/update/{{l._id}}">Update</a>
+                        <a class="btn btn-danger" href="/surat-pemberitahuan/delete/{{l._id}}">Delete</a>
                     </td>
                 </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Surat Izin Tidak Masuk Sekolah</td>
-                    <td>03/06/2023</td>
-                    <td>02</td>
-                    <td>
-                        <button class="btn-rounded">delete</button>
-                        <button class="btn-rounded">update</button>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Surat Izin Tidak Masuk Sekolah</td>
-                    <td>04/06/2023</td>
-                    <td>03</td>
-                    <td>
-                        <button class="btn-rounded">delete</button>
-                        <button class="btn-rounded">update</button>
-                    </td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
