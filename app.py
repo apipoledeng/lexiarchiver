@@ -20,6 +20,26 @@ app.secret_key=SECRET_KEY
 
 ALLOWED_FILE = ['docx','doc', 'pdf']
 
+@app.route("/")
+def home():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(
+            token_receive,
+            SECRET_KEY,
+            algorithms=['HS256']
+        )
+        return render_template('home.html')
+    except jwt.ExpiredSignatureError:
+        msg = 'Your token has expired'
+        flash(msg,'error')
+        return redirect(url_for('login'))
+    except jwt.exceptions.DecodeError:
+        msg = 'There was a problem a logging you in'
+        flash(msg,'error')
+        return redirect(url_for('login'))
+
+
 @app.route("/dashboard")
 def dashboard():
     token_receive = request.cookies.get('mytoken')
@@ -50,8 +70,12 @@ def dashboard():
 
 @app.route("/login", methods=['GET'])
 def login():
+    token_receive = request.cookies.get('mytoken')
+    if token_receive:
+        return redirect('/dashboard')
     msg = request.args.get('msg')
     return render_template('login.html', msg=msg)
+    
 
 @app.route("/sign_in",methods=['POST'])
 def sign_in():
