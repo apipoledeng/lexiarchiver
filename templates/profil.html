@@ -43,22 +43,18 @@
 <body>
     <section class="profil">
         <div class="navbar justify-content-center">
-            <header class="d-flex justify-content-left text-center py-3 mb-4">
+            <div class="d-flex justify-content-left text-center py-3 mb-4">
                 <ul class="nav" style="margin-top: 12px;">
                     <a class="nav-link" aria-current="page" href="/dashboard">Dashboard</a>
                     <a class="nav-link" href="/list-surat-masuk">Surat Masuk</a>
                     <a class="nav-link" href="/list-surat-keluar">Surat Keluar</a>
                     <a class="nav-link" href="/list-surat-pemberitahuan">Pemberitahuan</a>
                     <a class="nav-link" href="/list-surat-pengumuman">Pengumuman</a>
-                    <a class="nav-link" href="#">Search</a>
                 </ul>
                 
-            </header>
-            <div class="profil-nav col-3 d-flex justify-content-right" style="padding-left: 282px;">
-                <button onclick="sign_out()">Logout</button>
-                <!-- <a onclick="sign_out()">
-                    Logout
-                </a> -->
+            </div>
+            <div class="profil-nav col-3 d-flex justify-content-right" style="padding-left: 282px; padding-bottom: 41px;">
+                <button class="btn btn-success" onclick="sign_out()">Logout</button>
             </div>
         </div>
         <div class="container d-flex">
@@ -70,7 +66,7 @@
                     <p>Personal Information</p>
                 </div>
                 <div class="img2">
-                    <img src="../static/profile_placeholder.png" alt="">
+                    <img src="{{url_for('static', filename=user_info.photo)}}" style="border-radius: 100px;" alt="">
                 </div>
 
             </div>
