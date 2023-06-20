@@ -349,8 +349,7 @@
                     <a class="nav-link" href="/list-surat-masuk">Surat Masuk</a>
                     <a class="nav-link" href="/list-surat-keluar">Surat Keluar</a>
                     <a class="nav-link" href="/list-surat-pemberitahuan">Pemberitahuan</a>
-                    <a class="nav-link" href="/list-surat-pengumuman">Pengumuman</a>
-                    <a class="nav-link" href="#">Search</a>
+                    <a class="nav-link" href="/list-surat-pengumuman" style="color: #ffce56;">Pengumuman</a>
                 </div>
             </div>
             <div class="navbar-text">
@@ -358,8 +357,10 @@
                 <span class="email">{{user_info.email}}</span>
             </div>
             <a class="navbar-brand" href="/profile">
-                <img src="../static/profile.png" alt="Foto Profile" class="Foto Profile" />
-            </a>
+                <div class="foto-profile">
+                  <img src="{{url_for('static', filename=user_info.photo)}}" alt="Foto Profile" style="height: 61px; width: 61px; border-radius: 40px;" class="Foto Profile" />
+                </div>
+              </a>
         </div>
     </nav>
 
@@ -408,7 +409,6 @@
                     <th scope="col">NAMA FILE</th>
                     <th scope="col">TANGGAL</th>
                     <th scope="col">NOMOR SURAT</th>
-                    <th scope="col">LAMPIRAN SURAT</th>
                     <th scope="col">AKSI</th>
                 </tr>
             </thead>
@@ -419,9 +419,8 @@
                     <td>{{l.perihal}}</td>
                     <td>{{l.tanggal}}</td>
                     <td>{{l.nomor_surat}}</td>
-                    <td>{{l.lampiran}}</td>
                     <td>
-                        <a class="btn btn-secondary" href="{{l.lampiran}}">Detail</a>
+                        <a class="btn btn-secondary" href="{{url_for('static', filename=l.lampiran)}}">Detail</a>
                         <a class="btn btn-success" href="/surat-pengumuman/update/{{l._id}}">Update</a>
                         <a class="btn btn-danger" href="/surat-pengumuman/delete/{{l._id}}">Delete</a>
                     </td>
