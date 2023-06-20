@@ -629,30 +629,5 @@ def profile():
 def edit_profile():
     pass
 
-
-@app.route("/test", methods=['GET','POST'])
-def test():
-    # if request.method=='POST':
-        # tem_file = tempfile.gettempdir()
-        # return f'Temporary dir : {tem_file}'
-        # print(request.files)
-
-        # # file = request.files['fileku']
-
-        # file = request.files['fileku']
-        # filename = secure_filename('a'+file.filename)
-        # extension_surat = file.filename.split(".")[-1]
-        # print(file)
-        # print(filename)
-        # print(extension_surat)
-        # # file.save('./static/ngetes/')
-        # file.save(
-        #     os.path.join(BASE_DIR+'/lexiarchiver/static/ngetes/',
-        #                   filename))
-        # return redirect('/test')
-    # return render_template('test.html')
-    document_path = './static/letters/SP_011_21-06-2023_TUGAS_PENYUSUNAN_BAB_II-BAB_III.docx'
-    return send_file(document_path, as_attachment=True)
-
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=5008, debug=True)
+    app.run('0.0.0.0', port=5000, debug=True)
