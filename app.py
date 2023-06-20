@@ -31,8 +31,13 @@ def dashboard():
         )
         print(token_receive)
         user_info = db.users.find_one({"username": payload["id"]})
+        jumlah_surat_masuk = db.letters.count_documents({'kategori':'SM'})
+        jumlah_surat_keluar = db.letters.count_documents({'kategori':'SK'})
+        jumlah_surat_pemberitahuan = db.letters.count_documents({'kategori':'SP'})
+        jumlah_surat_pengumuman = db.letters.count_documents({'kategori':'SP'})
+        data = [jumlah_surat_masuk, jumlah_surat_keluar, jumlah_surat_pemberitahuan,jumlah_surat_pengumuman]
         print(user_info)
-        return render_template('dashboard2.html', user_info=user_info)
+        return render_template('dashboard.html', user_info=user_info, data=data)
     except jwt.ExpiredSignatureError:
         msg = 'Your token has expired'
         flash(msg,'error')
