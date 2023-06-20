@@ -10,25 +10,11 @@
 <body>
     <form action="/test", method="POST" enctype="multipart/form-data">
         <label for="">File</label>
-        <input type="file" id="fileInput" onchange="handleFileChange(event)">
-        <!-- <button onclick="">Submit</button> -->
+        <input type="file" name="fileku">
+        <button >Submit</button>
     </form>
-
     <script>
-        function handleFileChange(event) {
-            const fileInput = event.target;
-            const files = fileInput.files;
-          
-            if (files.length > 0) {
-              const file = files[0];
-              const directoryPath = file.webkitRelativePath
-                ? file.webkitRelativePath.replace(file.name, '')
-                : '';
-          
-              console.log('Directory Path:', directoryPath);
-            }
-          }
+        alert('{{msg}}')
     </script>
-    
 </body>
 </html>
