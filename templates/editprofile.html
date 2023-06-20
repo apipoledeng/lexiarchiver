@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Edit-profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous" />
+    <script src="https://kit.fontawesome.com/9fb14998a3.js" crossorigin="anonymous"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kelly+Slab&family=Libre+Bodoni&display=swap');
+
+        body {
+            background-color: #0E4B5F;
+        }
+
+        .content {
+            position: absolute;
+            width: 1220px;
+            height: 550px;
+            left: 68px;
+            top: 15px;
+            background-color: #ffffff;
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .photo {
+            position: absolute;
+            width: 236px;
+            height: 37px;
+            left: 90px;
+            top: 30px;
+            font-family: 'Kelly Slab';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 28px;
+            line-height: 20px;
+            color: #0E4B5F;
+        }
+
+        img {
+            position: absolute;
+            width: 120px;
+            height: 113px;
+            left: 122px;
+            top: 96px;
+        }
+
+        .btn-1 {
+            position: absolute;
+            width: 140px;
+            height: 42px;
+            left: 269px;
+            top: 164px;
+            border-radius: 50px;
+            border: 0.5px solid #0E4B5F;
+            background-color: #0E4B5F;
+            color: #ffffff;
+            font-family: 'Kelly Slab';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 24px;
+            line-height: 20px;
+        }
+
+        .btn-2 {
+            position: absolute;
+            width: 140px;
+            height: 52px;
+            left: 415px;
+            top: 164px;
+            border-radius: 50px;
+            border: none;
+            background-color: #ffffff;
+            color: black;
+            font-family: 'Kelly Slab';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 24px;
+            line-height: 20px;
+        }
+
+        .personal {
+            position: absolute;
+            width: 322px;
+            height: 63px;
+            left: 90px;
+            top: 230px;
+            font-family: 'Kelly Slab';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 28px;
+            line-height: 20px;
+            color: #0E4B5F;
+        }
+
+        .personal-infomation {
+            flex-basis: 50%;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-auto-rows: minmax(auto, auto);
+            gap: 10px;
+            margin-top: 282px;
+            margin-left: 90px;
+        }
+
+        .form-control {
+            width: 226px;
+            height: 41px;
+            border-radius: 20px;
+            background-color: #D9D9D9;
+        }
+
+        .mb-3,
+        #firstname,
+        #lastname,
+        #city,
+        #bio {
+            font-family: 'Libre Bodoni';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 18px;
+            line-height: 20px;
+        }
+
+
+        .btn-cancel {
+            position: absolute;
+            width: 99px;
+            height: 35px;
+            left: 304px;
+            top: 480px;
+            border: none;
+            border-radius: 50px;
+
+            font-family: 'Kelly Slab';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 24px;
+            line-height: 20px;
+
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        .btn-save {
+            position: absolute;
+            width: 99px;
+            height: 35px;
+            left: 440px;
+            top: 480px;
+
+            font-family: 'Kelly Slab';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 24px;
+            line-height: 20px;
+            border: 0.5px solid #0E4B5F;
+
+            background: #0E4B5F;
+            border-radius: 50px;
+            color: #ffffff;
+        }
+
+        .security {
+            flex-basis: 45%;
+            margin-top: 90px;
+        }
+
+        .title-security {
+            position: absolute;
+            width: 196px;
+            height: 32px;
+            left: 670px;
+            top: 35px;
+            font-family: 'Kelly Slab';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 28px;
+            line-height: 20px;
+            color: #0E4B5F;
+        }
+
+        .change {
+            position: absolute;
+            width: 148px;
+            height: 34px;
+            left: 1070px;
+            top: 120px;
+            border: none;
+            background-color: #ffffff;
+
+            font-family: 'Libre Bodoni';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 20px;
+            line-height: 20px;
+        }
+
+        .btn-save-password {
+            position: absolute;
+            width: 99px;
+            height: 35px;
+            left: 965px;
+            top: 430px;
+
+            font-family: 'Kelly Slab';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 24px;
+            line-height: 20px;
+            border: 0.5px solid #0E4B5F;
+
+            background: #0E4B5F;
+            border-radius: 50px;
+            color: #ffffff;
+        }
+
+        #email-addres, #nohp, #password1, #password2 {
+            width: 400px;
+            height: 41px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <div class="edit-foto">
+            <h6 class="photo">Photo Setting</h6>
+            <img src="../static/profile.png" alt="foto profil">
+            <button type="submit" class="btn-1">Change</button>
+            <button type="submit" class="btn-2">Remove</button>
+        </div>
+
+        <div class="personal-infomation">
+            <h6 class="personal">Personal Information</h6>
+            <form class="form-grid">
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="firstname" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="firstname">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="city" class="form-label">City</label>
+                            <input type="text" class="form-control" id="city">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="lastname" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="lastname">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="bio" class="form-label">Bio</label>
+                            <input type="text" class="form-control" id="bio">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button type="submit" class="btn-cancel">Cancel</button>
+                        <button type="submit" class="btn-save">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="security">
+            <h6 class="title-security">Security</h6>
+            <div class="form">
+                <form>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="email-addres">
+                        <button type="submit" class="change">Change E-mail</button>
+                    </div>
+                    <div class="mb-3">
+                        <label for="nohp" class="form-label">Nomor Telepon</label>
+                        <input type="number" class="form-control" id="nohp">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">New Password</label>
+                        <input type="password" class="form-control" id="password1">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Confirmation Password</label>
+                        <input type="password" class="form-control" id="password2">
+                    </div>
+                    <button type="submit" class="btn-save-password">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

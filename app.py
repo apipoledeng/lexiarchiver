@@ -32,7 +32,7 @@ def dashboard():
         print(token_receive)
         user_info = db.users.find_one({"username": payload["id"]})
         print(user_info)
-        return render_template('dashboard.html', user_info=user_info)
+        return render_template('dashboard2.html', user_info=user_info)
     except jwt.ExpiredSignatureError:
         msg = 'Your token has expired'
         flash(msg,'error')
