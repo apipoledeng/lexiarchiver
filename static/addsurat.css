@@ -40,8 +40,8 @@
     padding-left: 86px;
 }
 .myform-input textarea{
-    background-color: #1688ad;
-    color: white;
+    background-color: #D9D9D9;
+    color: black;
     width: 577px;
     height: 100px
 }
@@ -50,18 +50,18 @@
     width: 218.64px;
     /* height: 30px; */
 
-    background: #1688AD;
+    background: #D9D9D9;
     /* border-radius: 3px; */
-    color: white;
+    color: black;
 }
 
 .myform-input select {
     width: 218.64px;
     /* height: 30px; */
 
-    background: #1688AD;
+    background: #D9D9D9;
     /* border-radius: 3px; */
-    color: white;
+    color: black;
 }
 
 .mb-4 input {
@@ -69,8 +69,8 @@
     height: 40px;
     left: 129px;
     top: 561px;
-    color: white;
-    background: #1688AD;
+    color: black;
+    background: #D9D9D9;
     border-radius: 10px;
 }
 
@@ -78,9 +78,9 @@
     width: 343px;
     height: 40px;
 
-    background: #1688AD;
+    background: #D9D9D9;
     border-radius: 10px;
-    color: white;
+    color: black;
 }
 
 .form-add img {
