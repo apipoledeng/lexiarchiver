@@ -13,7 +13,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 client = MongoClient(MONGODB_CONNECTION_STRING)
 db = client.lexiarchiver
 
-app = Flask(__name__)
+app = Flask(__name__,static_url_path='/static')
 # app.config['UPLOAD_FOLDER'] = './static/ngetes/'
 SECRET_KEY = "7kU3kX2ijYQkzi4B"
 app.secret_key=SECRET_KEY
@@ -627,7 +627,58 @@ def profile():
 
 @app.route("/edit-profile")
 def edit_profile():
-    pass
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(
+            token_receive, SECRET_KEY,algorithms=['HS256']
+        )
+        user_info=db.users.find_one({'username':payload.get('id')})
+        return render_template('editprofile.html',user_info=user_info)
+    except(jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for('dashboard'))
+    
 
+@app.route("/test")
+def test():
+    ...
+    
+@app.route("/edit-profile-save-image/<id>", methods=['POST'])
+def edit_profile_image(id):
+    print(request.form)
+    obj = db.users.find_one({'_id':ObjectId(id)})
+    if request.method=='POST':
+        
+        first_name = request.form['firstname']
+        last_name = request.form['lastname']
+        bio = request.form['bio']
+        photo = request.files['profile-picture']
+
+        photo.save('/tmp/foo')
+        file_size = os.stat('/tmp/foo').st_size
+        extension_surat = photo.filename.split(".")[-1]
+        if photo != "":
+            if file_size <= 5*1000*1000:
+                filename = secure_filename(photo.filename)
+                photo.save(os.path.join(BASE_DIR+'/lexiarchiver/static/image', filename))
+                data = {
+                    'first_name':first_name,
+                    'last_name': last_name,
+                    'bio':bio,'photo':'image/'+ filename
+                    }
+                db.users.update_one({'_id':ObjectId(id)},{'$set': data})
+                # flash('The letter has been successfully edited.','success')
+                return redirect(url_for('profile'))
+            else:
+                flash('The file size exceeds 5 Mb.', 'error')
+                return redirect(url_for('profile'))
+        else:
+            data = {
+                    'first_name':first_name,
+                    'last_name': last_name,
+                    'bio':bio,
+                    }
+            db.users.update_one({'_id':ObjectId(id)},{'$set': data})
+                # flash('The letter has been successfully edited.','success')
+            return redirect(url_for('profile'))
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
