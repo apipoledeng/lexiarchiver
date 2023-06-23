@@ -202,7 +202,7 @@
 
 <body>
     <div class="content">
-        <form action="/edit-profile-save-image/{{user_info._id}}" enctype="multipart/form-data" method="POST">
+        <form action="/edit-profile-save-image" enctype="multipart/form-data" method="POST">
             <div class="edit-foto">
                 <h6 class="photo">Photo Setting</h6>
                 <img src="{{url_for('static', filename=user_info.photo)}}" style="border-radius: 100px;" alt="foto profil">
@@ -250,25 +250,25 @@
             </div>
         </form>
 
-        <form action="/edit-save-security-data" method="POST" enctype="multipart/form-data">
+        <form action="/edit-profile-security" method="POST">
             <div class="security" style="padding-right: 101px;padding-top: 20px;">
                 <h6 class="title-security">Security</h6>
                 <div class="form">
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Email address</label>
-                        <input type="email" class="form-control" id="email-addres" value="{{user_info.email}}">
+                        <input type="email" class="form-control" name="email" value="{{user_info.email}}">
                     </div>
                     <div class="mb-3">
                         <label for="nohp" class="form-label">Nomor Telepon</label>
-                        <input type="text" class="form-control" id="nohp" value="{{user_info.phone}}">
+                        <input type="text" class="form-control" name="phone" value="{{user_info.phone}}">
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">New Password</label>
-                        <input type="password" class="form-control" id="password1">
+                        <input type="password" class="form-control" name="password1">
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Confirmation Password</label>
-                        <input type="password" class="form-control" id="password2">
+                        <input type="password" class="form-control" name="password2">
                     </div>
                     <button type="submit" class="btn-save-password" style="margin-top: 37px;">Save</button>
                 </div>
