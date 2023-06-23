@@ -416,6 +416,7 @@
                     <td>{{l.tanggal}}</td>
                     <td>{{l.nomor_surat}}</td>
                     <td>
+                        <a class="btn btn-secondary" href="{{url_for('static', filename=l.lampiran)}}">Detail</a>
                         <a class="btn btn-success" href="/surat-masuk/update/{{l._id}}">Update</a>
                         <a class="btn btn-danger" href="/surat-masuk/delete/{{l._id}}">Delete</a>
                     </td>

@@ -6,19 +6,20 @@ import jwt
 from werkzeug.utils import secure_filename
 from bson.objectid import ObjectId
 import os
-import tempfile
+import datetime as dt
 
 MONGODB_CONNECTION_STRING = "mongodb+srv://kentang:eUenw9z4QIlEoGzW@cluster0.mjce1r3.mongodb.net/?retryWrites=true&w=majority"
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 client = MongoClient(MONGODB_CONNECTION_STRING)
 db = client.lexiarchiver
 
-app = Flask(__name__)
+app = Flask(__name__,static_url_path='/static')
 # app.config['UPLOAD_FOLDER'] = './static/ngetes/'
 SECRET_KEY = "7kU3kX2ijYQkzi4B"
 app.secret_key=SECRET_KEY
 
 ALLOWED_FILE = ['docx','doc', 'pdf']
+ALLOWED_IMAGE = ['jpg','jpeg','png']
 
 @app.route("/")
 def home():
@@ -132,43 +133,32 @@ def add_surat_masuk_save():
     lampiran_receiver = request.files['lampiran']
     keterangan_receiver = request.form.get('keterangan')
 
-
-    #simpan file di tmp/foo
-    lampiran_receiver.save('/tmp/foo')
-    #akses dan cek ukuran file pada tmp/foo dir
-    file_size = os.stat('/tmp/foo').st_size
     extension_surat = lampiran_receiver.filename.split(".")[-1]
-    #cek ukuan file
-    if file_size <= 5*1000*1000:
-        #cek extensi
-        if extension_surat not in ALLOWED_FILE:
+    if extension_surat not in ALLOWED_FILE:
             flash('The file must be .docs, .doc, and .pdf ', 'error')
             return redirect(url_for('list_surat_masuk'))
-        #simpan surat
-        tanggal_to_datetime = datetime.strptime(tanggal_receiver, "%Y-%m-%d")
-        datetime_to_tanggal = tanggal_to_datetime.strftime('%d-%m-%Y')
-        print(tanggal_to_datetime)
-        print(datetime_to_tanggal)
-        surat = {
-            'nomor_surat':f'{kategori_receiver}/{nomor_surat_receiver}',
-            'kategori': kategori_receiver,
-            'tanggal':datetime_to_tanggal,
-            'tujuan': tujuan_receiver,
-            'perihal': perihal_receiver,
-            'pengirim':pengirim_receiver,
-            'keterangan':keterangan_receiver
-        }
-        print(lampiran_receiver)
-        filename = secure_filename(lampiran_receiver.filename) #secure file
-        file_path = f"letters/{kategori_receiver}_{nomor_surat_receiver}_{datetime_to_tanggal}_{filename}" #membuat path baru
-        lampiran_receiver.save(os.path.join(BASE_DIR+'/lexiarchiver/static/', file_path)) #menyimpan file
-        surat["lampiran"] = file_path #menambah key value
-        db.letters.insert_one(surat)
-        flash('The letter has been successfully saved.', 'success')
-        return redirect(url_for('list_surat_masuk'))
-    else:
-        flash('The file size exceeds 5 Mb.', 'error')
-        return redirect(url_for('list_surat_masuk'))
+    #simpan surat
+    tanggal_to_datetime = datetime.strptime(tanggal_receiver, "%Y-%m-%d")
+    datetime_to_tanggal = tanggal_to_datetime.strftime('%d-%m-%Y')
+    print(tanggal_to_datetime)
+    print(datetime_to_tanggal)
+    surat = {
+        'nomor_surat':f'{kategori_receiver}/{nomor_surat_receiver}',
+        'kategori': kategori_receiver,
+        'tanggal':datetime_to_tanggal,
+        'tujuan': tujuan_receiver,
+        'perihal': perihal_receiver,
+        'pengirim':pengirim_receiver,
+        'keterangan':keterangan_receiver
+    }
+    print(lampiran_receiver)
+    filename = secure_filename(lampiran_receiver.filename) #secure file
+    file_path = f"letters/{kategori_receiver}_{nomor_surat_receiver}_{datetime_to_tanggal}_{filename}" #membuat path baru
+    lampiran_receiver.save('./static/' + file_path) #menyimpan file
+    surat["lampiran"] = file_path #menambah key value
+    db.letters.insert_one(surat)
+    flash('The letter has been successfully saved.', 'success')
+    return redirect(url_for('list_surat_masuk'))
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -183,41 +173,34 @@ def surat_masuk_delete(id):
 @app.route("/surat-masuk/update/<id>", methods=['GET','POST'])
 def surat_masuk_update(id):
     obj = db.letters.find_one({'_id':ObjectId(id)})
-    # print(obj)
+    print(obj)
     if request.method == 'POST':
-        # print("Ngepost")
+
         tanggal_to_datetime = datetime.strptime(request.form['tanggal'], "%Y-%m-%d")
         datetime_to_tanggal = tanggal_to_datetime.strftime('%d-%m-%Y')
         lampiran_receiver =request.files['lampiran']
-        
-        lampiran_receiver.save('/tmp/foo')
-        file_size = os.stat('/tmp/foo').st_size
+
         extension_surat = lampiran_receiver.filename.split(".")[-1]
 
-        if file_size <= 5*1000*1000:
-            #cek extensi
-            if extension_surat not in ALLOWED_FILE:
+        if extension_surat not in ALLOWED_FILE:
                 flash('The file must be .docs, .doc, and .pdf ', 'error')
                 return redirect(url_for('list_surat_masuk'))
-            filename = secure_filename(lampiran_receiver.filename) #secure file
-            file_path = f"letters/{request.form['kategori']}_{request.form['nomor_surat']}_{datetime_to_tanggal}_{filename}" #membuat path baru            
-            lampiran_receiver.save(os.path.join(BASE_DIR+'/lexiarchiver/static/', file_path)) #menyimpan file    
-            data = {
-                'nomor_surat':f"SM/{request.form['nomor_surat']}",
-                'kategori':request.form['kategori'],
-                'tanggal':datetime_to_tanggal,
-                'tujuan':request.form['tujuan'],
-                'perihal':request.form['perihal'],
-                'pengirim':request.form['pengirim'],
-                'keterangan':request.form['keterangan'],
-                'lampiran':file_path
-            }
-            db.letters.update_one({'_id':ObjectId(id)},{'$set': data})
-            flash('The letter has been successfully edited.','success')
-            return redirect(url_for('list_surat_masuk'))
-        else:
-            flash('The file size exceeds 5 Mb.', 'error')
-            return redirect(url_for('list_surat_masuk'))
+        filename = secure_filename(lampiran_receiver.filename) #secure file
+        file_path = f"letters/{request.form['kategori']}_{request.form['nomor_surat']}_{datetime_to_tanggal}_{filename}" #membuat path baru            
+        lampiran_receiver.save(os.path.join(BASE_DIR+'/lexiarchiver/static/', file_path)) #menyimpan file    
+        data = {
+            'nomor_surat':f"SM/{request.form['nomor_surat']}",
+            'kategori':request.form['kategori'],
+            'tanggal':datetime_to_tanggal,
+            'tujuan':request.form['tujuan'],
+            'perihal':request.form['perihal'],
+            'pengirim':request.form['pengirim'],
+            'keterangan':request.form['keterangan'],
+            'lampiran':file_path
+        }
+        db.letters.update_one({'_id':ObjectId(id)},{'$set': data})
+        flash('The letter has been successfully edited.','success')
+        return redirect(url_for('list_surat_masuk'))
     obj['nomor_surat']=obj['nomor_surat'].replace("SM/",'')
     date_object = datetime.strptime(obj['tanggal'], '%d-%m-%Y')
     new_date_string = date_object.strftime('%Y-%m-%d')
@@ -262,44 +245,88 @@ def add_surat_keluar_save():
     perihal_receiver = request.form['perihal']
     lampiran_receiver = request.files['lampiran']
     keterangan_receiver = request.form.get('keterangan')
-
-
-    #simpan file di tmp/foo
-    lampiran_receiver.save('/tmp/foo')
-    #akses dan cek ukuran file pada tmp/foo dir
-    file_size = os.stat('/tmp/foo').st_size
+    
     extension_surat = lampiran_receiver.filename.split(".")[-1]
     #cek ukuan file
-    if file_size <= 5*1000*1000:
-        #cek extensi
-        if extension_surat not in ALLOWED_FILE:
+    if extension_surat not in ALLOWED_FILE:
             flash('The file must be .docs, .doc, and .pdf ', 'error')
             return redirect(url_for('list_surat_keluar'))
         #simpan surat
-        tanggal_to_datetime = datetime.strptime(tanggal_receiver, "%Y-%m-%d")
-        datetime_to_tanggal = tanggal_to_datetime.strftime('%d-%m-%Y')
-        print(tanggal_to_datetime)
-        print(datetime_to_tanggal)
-        surat = {
-            'nomor_surat':f'{kategori_receiver}/{nomor_surat_receiver}',
-            'kategori': kategori_receiver,
-            'tanggal':datetime_to_tanggal,
-            'tujuan': tujuan_receiver,
-            'perihal': perihal_receiver,
-            'pengirim':pengirim_receiver,
-            'keterangan':keterangan_receiver
-        }
-        print(lampiran_receiver)
-        filename = secure_filename(lampiran_receiver.filename) #secure file
-        file_path = f"letters/{kategori_receiver}_{nomor_surat_receiver}_{datetime_to_tanggal}_{filename}" #membuat path baru
-        lampiran_receiver.save(os.path.join(BASE_DIR+'/lexiarchiver/static/', file_path)) #menyimpan file
-        surat["lampiran"] = file_path #menambah key value
-        db.letters.insert_one(surat)
-        flash('The letter has been successfully saved.', 'success')
-        return redirect(url_for('list_surat_keluar'))
-    else:
-        flash('The file size exceeds 5 Mb.', 'error')
-        return redirect(url_for('list_surat_keluar'))
+    tanggal_to_datetime = datetime.strptime(tanggal_receiver, "%Y-%m-%d")
+    datetime_to_tanggal = tanggal_to_datetime.strftime('%d-%m-%Y')
+    print(tanggal_to_datetime)
+    print(datetime_to_tanggal)
+    surat = {
+        'nomor_surat':f'{kategori_receiver}/{nomor_surat_receiver}',
+        'kategori': kategori_receiver,
+        'tanggal':datetime_to_tanggal,
+        'tujuan': tujuan_receiver,
+        'perihal': perihal_receiver,
+        'pengirim':pengirim_receiver,
+        'keterangan':keterangan_receiver
+    }
+    print(lampiran_receiver)
+    filename = secure_filename(lampiran_receiver.filename) #secure file
+    file_path = f"letters/{kategori_receiver}_{nomor_surat_receiver}_{datetime_to_tanggal}_{filename}" #membuat path baru
+    lampiran_receiver.save(os.path.join(BASE_DIR+'/lexiarchiver/static/', file_path)) #menyimpan file
+    surat["lampiran"] = file_path #menambah key value
+    db.letters.insert_one(surat)
+    flash('The letter has been successfully saved.', 'success')
+    return redirect(url_for('list_surat_keluar'))
+    
+# @app.route("/add-surat-keluar-save", methods=['POST'])
+# def add_surat_keluar_save():
+#     nomor_surat_receiver = request.form.get('nomor_surat')
+#     kategori_receiver = request.form.get('kategori')
+#     pengirim_receiver = request.form.get('pengirim')
+#     tanggal_receiver = request.form.get('tanggal')
+#     tujuan_receiver = request.form['tujuan']
+#     perihal_receiver = request.form['perihal']
+#     lampiran_receiver = request.files['lampiran']
+#     keterangan_receiver = request.form.get('keterangan')
+#     print("File Size", lampiran_receiver.content_length)
+
+    #simpan file di tmp/foo
+    # request.files['lampiran'].save('/tmp/foo')
+    # #akses dan cek ukuran file pada tmp/foo dir
+    # file_size = os.stat('/tmp/foo').st_size
+    # print("Ukuran FIle", file_size)
+    # extension_surat = lampiran_receiver.filename.split(".")[-1]
+    #cek ukuan file
+
+    # if extension_surat not in ALLOWED_FILE:
+    #         flash('The file must be .docs, .doc, and .pdf ', 'error')
+    #         return redirect(url_for('list_surat_keluar'))
+        #simpan surat
+    # tanggal_to_datetime = datetime.strptime(tanggal_receiver, "%Y-%m-%d")
+
+    # datetime_to_tanggal = tanggal_to_datetime.strftime('%d-%m-%Y')
+    # print(tanggal_to_datetime)
+    # print(datetime_to_tanggal)
+    # surat = {
+    #     'nomor_surat':f'{kategori_receiver}/{nomor_surat_receiver}',
+    #     'kategori': kategori_receiver,
+    #     'tanggal':datetime_to_tanggal,
+    #     'tujuan': tujuan_receiver,
+    #     'perihal': perihal_receiver,
+    #     'pengirim':pengirim_receiver,
+    #     'keterangan':keterangan_receiver
+    # }
+    # print(lampiran_receiver)
+    # filename = secure_filename(lampiran_receiver.filename) #secure file
+    # file_path = f"letters/{kategori_receiver}_{nomor_surat_receiver}_{datetime_to_tanggal}_{filename}" #membuat path baru
+    # lampiran_receiver.save(os.path.join(BASE_DIR+'/lexiarchiver/static/', file_path)) #menyimpan file
+    # surat["lampiran"] = file_path #menambah key value
+    # db.letters.insert_one(surat)
+    # flash('The letter has been successfully saved.', 'success')
+    # return redirect(url_for('list_surat_keluar'))
+
+    # if file_size <= 5*1000*1000:
+    #     #cek extensi
+    #     pass
+    # else:
+    #     flash('The file size exceeds 5 Mb.', 'error')
+    #     return redirect(url_for('list_surat_keluar'))
 
 @app.route("/surat-keluar/delete/<id>", methods=['GET'])
 def surat_keluar_delete(id):
@@ -313,37 +340,31 @@ def surat_keluar_update(id):
     obj = db.letters.find_one({'_id':ObjectId(id)})
     print(obj)
     if request.method == 'POST':
-        print("Ngepost")
         tanggal_to_datetime = datetime.strptime(request.form['tanggal'], "%Y-%m-%d")
         datetime_to_tanggal = tanggal_to_datetime.strftime('%d-%m-%Y')
         lampiran_receiver =request.files['lampiran']
-        lampiran_receiver.save('/tmp/foo')
-        file_size = os.stat('/tmp/foo').st_size
+        
+        
         extension_surat = lampiran_receiver.filename.split(".")[-1]
-        if file_size <= 5*1000*1000:
-            #cek extensi
-            if extension_surat not in ALLOWED_FILE:
-                flash('The file must be .docs, .doc, and .pdf ', 'error')
-                return redirect(url_for('list_surat_masuk'))
-            filename = secure_filename(lampiran_receiver.filename) #secure file
-            file_path = f"letters/{request.form['kategori']}_{request.form['nomor_surat']}_{datetime_to_tanggal}_{filename}" #membuat path baru
-            print(file_path)
-            lampiran_receiver.save(os.path.join(BASE_DIR+'/lexiarchiver/static/', file_path)) #menyimpan file
-            data = {
-                'nomor_surat':f"SK/{request.form['nomor_surat']}",
-                'kategori':request.form['kategori'],
-                'tanggal':datetime_to_tanggal,
-                'tujuan':request.form['tujuan'],
-                'perihal':request.form['perihal'],
-                'pengirim':request.form['pengirim'],
-                'keterangan':request.form['keterangan'],
-                'lampiran':file_path
-            }
-            db.letters.update_one({'_id':ObjectId(id)},{'$set': data})
-            flash('The letter has been successfully edited.','success')
-            return redirect(url_for('list_surat_keluar'))
-    else:
-        flash('The file size exceeds 5 Mb.', 'error')
+        if extension_surat not in ALLOWED_FILE:
+            flash('The file must be .docs, .doc, and .pdf ', 'error')
+            return redirect(url_for('list_surat_masuk'))
+        filename = secure_filename(lampiran_receiver.filename) #secure file
+        file_path = f"letters/{request.form['kategori']}_{request.form['nomor_surat']}_{datetime_to_tanggal}_{filename}" #membuat path baru
+        print(file_path)
+        lampiran_receiver.save(os.path.join(BASE_DIR+'/lexiarchiver/static/', file_path)) #menyimpan file
+        data = {
+            'nomor_surat':f"SK/{request.form['nomor_surat']}",
+            'kategori':request.form['kategori'],
+            'tanggal':datetime_to_tanggal,
+            'tujuan':request.form['tujuan'],
+            'perihal':request.form['perihal'],
+            'pengirim':request.form['pengirim'],
+            'keterangan':request.form['keterangan'],
+            'lampiran':file_path
+        }
+        db.letters.update_one({'_id':ObjectId(id)},{'$set': data})
+        flash('The letter has been successfully edited.','success')
         return redirect(url_for('list_surat_keluar'))
     obj['nomor_surat']=obj['nomor_surat'].replace("SK/",'')
     date_object = datetime.strptime(obj['tanggal'], '%d-%m-%Y')
@@ -392,43 +413,32 @@ def add_surat_pemberitahuan_save():
     lampiran_receiver = request.files['lampiran']
     keterangan_receiver = request.form.get('keterangan')
 
-
-    #simpan file di tmp/foo
-    lampiran_receiver.save('/tmp/foo')
-    #akses dan cek ukuran file pada tmp/foo dir
-    file_size = os.stat('/tmp/foo').st_size
     extension_surat = lampiran_receiver.filename.split(".")[-1]
-    #cek ukuan file
-    if file_size <= 5*1000*1000:
-        #cek extensi
-        if extension_surat not in ALLOWED_FILE:
-            flash('The file must be .docs, .doc, and .pdf ', 'error')
-            return redirect(url_for('list_surat_pemberitahuan'))
+    if extension_surat not in ALLOWED_FILE:
+        flash('The file must be .docs, .doc, and .pdf ', 'error')
+        return redirect(url_for('list_surat_pemberitahuan'))
         #simpan surat
-        tanggal_to_datetime = datetime.strptime(tanggal_receiver, "%Y-%m-%d")
-        datetime_to_tanggal = tanggal_to_datetime.strftime('%d-%m-%Y')
-        print(tanggal_to_datetime)
-        print(datetime_to_tanggal)
-        surat = {
-            'nomor_surat':f'{kategori_receiver}/{nomor_surat_receiver}',
-            'kategori': kategori_receiver,
-            'tanggal':datetime_to_tanggal,
-            'tujuan': tujuan_receiver,
-            'perihal': perihal_receiver,
-            'pengirim':pengirim_receiver,
-            'keterangan':keterangan_receiver
-        }
-        print(lampiran_receiver)
-        filename = secure_filename(lampiran_receiver.filename) #secure file
-        file_path = f"letters/{kategori_receiver}_{nomor_surat_receiver}_{datetime_to_tanggal}_{filename}" #membuat path baru
-        lampiran_receiver.save(os.path.join(BASE_DIR+'/lexiarchiver/static/', file_path)) #menyimpan file
-        surat["lampiran"] = file_path #menambah key value
-        db.letters.insert_one(surat)
-        flash('The letter has been successfully saved.', 'success')
-        return redirect(url_for('list_surat_pemberitahuan'))
-    else:
-        flash('The file size exceeds 5 Mb.', 'error')
-        return redirect(url_for('list_surat_pemberitahuan'))
+    tanggal_to_datetime = datetime.strptime(tanggal_receiver, "%Y-%m-%d")
+    datetime_to_tanggal = tanggal_to_datetime.strftime('%d-%m-%Y')
+    print(tanggal_to_datetime)
+    print(datetime_to_tanggal)
+    surat = {
+        'nomor_surat':f'{kategori_receiver}/{nomor_surat_receiver}',
+        'kategori': kategori_receiver,
+        'tanggal':datetime_to_tanggal,
+        'tujuan': tujuan_receiver,
+        'perihal': perihal_receiver,
+        'pengirim':pengirim_receiver,
+        'keterangan':keterangan_receiver
+    }
+    print(lampiran_receiver)
+    filename = secure_filename(lampiran_receiver.filename) #secure file
+    file_path = f"letters/{kategori_receiver}_{nomor_surat_receiver}_{datetime_to_tanggal}_{filename}" #membuat path baru
+    lampiran_receiver.save(os.path.join(BASE_DIR+'/lexiarchiver/static/', file_path)) #menyimpan file
+    surat["lampiran"] = file_path #menambah key value
+    db.letters.insert_one(surat)
+    flash('The letter has been successfully saved.', 'success')
+    return redirect(url_for('list_surat_pemberitahuan'))
 
 @app.route("/surat-pemberitahuan/delete/<id>", methods=['GET'])
 def surat_pemberitahuan_delete(id):
@@ -446,35 +456,27 @@ def surat_pemberitahuan_update(id):
         datetime_to_tanggal = tanggal_to_datetime.strftime('%d-%m-%Y')
         lampiran_receiver =request.files['lampiran']
 
-        lampiran_receiver.save('/tmp/foo')
-        file_size = os.stat('/tmp/foo').st_size
         extension_surat = lampiran_receiver.filename.split(".")[-1]
-
-        if file_size <= 5*1000*1000:
-            #cek extensi
-            if extension_surat not in ALLOWED_FILE:
+        if extension_surat not in ALLOWED_FILE:
                 flash('The file must be .docs, .doc, and .pdf ', 'error')
                 return redirect(url_for('list_surat_pemberitahuan'))
-            filename = secure_filename(lampiran_receiver.filename) #secure file
-            file_path = f"letters/{request.form['kategori']}_{request.form['nomor_surat']}_{datetime_to_tanggal}_{filename}" #membuat path baru
-            print(file_path)
-            lampiran_receiver.save(os.path.join(BASE_DIR+'/lexiarchiver/static/', file_path)) #menyimpan file
-            data = {
-                'nomor_surat':f"SP/{request.form['nomor_surat']}",
-                'kategori':request.form['kategori'],
-                'tanggal':datetime_to_tanggal,
-                'tujuan':request.form['tujuan'],
-                'perihal':request.form['perihal'],
-                'pengirim':request.form['pengirim'],
-                'keterangan':request.form['keterangan'],
-                'lampiran':file_path
-            }
-            db.letters.update_one({'_id':ObjectId(id)},{'$set': data})
-            flash('The letter has been successfully edited.','success')
-            return redirect(url_for('list_surat_pemberitahuan'))
-        else:
-            flash('The file size exceeds 5 Mb.', 'error')
-            return redirect(url_for('list_surat_pemberitahuan'))
+        filename = secure_filename(lampiran_receiver.filename) #secure file
+        file_path = f"letters/{request.form['kategori']}_{request.form['nomor_surat']}_{datetime_to_tanggal}_{filename}" #membuat path baru
+        print(file_path)
+        lampiran_receiver.save(os.path.join(BASE_DIR+'/lexiarchiver/static/', file_path)) #menyimpan file
+        data = {
+            'nomor_surat':f"SP/{request.form['nomor_surat']}",
+            'kategori':request.form['kategori'],
+            'tanggal':datetime_to_tanggal,
+            'tujuan':request.form['tujuan'],
+            'perihal':request.form['perihal'],
+            'pengirim':request.form['pengirim'],
+            'keterangan':request.form['keterangan'],
+            'lampiran':file_path
+        }
+        db.letters.update_one({'_id':ObjectId(id)},{'$set': data})
+        flash('The letter has been successfully edited.','success')
+        return redirect(url_for('list_surat_pemberitahuan'))
     obj['nomor_surat']=obj['nomor_surat'].replace("SP/",'')
     date_object = datetime.strptime(obj['tanggal'], '%d-%m-%Y')
     new_date_string = date_object.strftime('%Y-%m-%d')
@@ -520,43 +522,33 @@ def add_surat_pengumuman_save():
     lampiran_receiver = request.files['lampiran']
     keterangan_receiver = request.form.get('keterangan')
 
-
-    #simpan file di tmp/foo
-    lampiran_receiver.save('/tmp/foo')
-    #akses dan cek ukuran file pada tmp/foo dir
-    file_size = os.stat('/tmp/foo').st_size
     extension_surat = lampiran_receiver.filename.split(".")[-1]
     #cek ukuan file
-    if file_size <= 5*1000*1000:
-        #cek extensi
-        if extension_surat not in ALLOWED_FILE:
+    if extension_surat not in ALLOWED_FILE:
             flash('The file must be .docs, .doc, and .pdf ', 'error')
             return redirect(url_for('list_surat_pengumuman'))
         #simpan surat
-        tanggal_to_datetime = datetime.strptime(tanggal_receiver, "%Y-%m-%d")
-        datetime_to_tanggal = tanggal_to_datetime.strftime('%d-%m-%Y')
-        print(tanggal_to_datetime)
-        print(datetime_to_tanggal)
-        surat = {
-            'nomor_surat':f'{kategori_receiver}/{nomor_surat_receiver}',
-            'kategori': kategori_receiver,
-            'tanggal':datetime_to_tanggal,
-            'tujuan': tujuan_receiver,
-            'perihal': perihal_receiver,
-            'pengirim':pengirim_receiver,
-            'keterangan':keterangan_receiver
-        }
-        print(lampiran_receiver)
-        filename = secure_filename(lampiran_receiver.filename) #secure file
-        file_path = f"letters/{kategori_receiver}_{nomor_surat_receiver}_{datetime_to_tanggal}_{filename}" #membuat path baru
-        lampiran_receiver.save(os.path.join(BASE_DIR+'/lexiarchiver/static/', file_path)) #menyimpan file
-        surat["lampiran"] = file_path #menambah key value
-        db.letters.insert_one(surat)
-        flash('The letter has been successfully saved.', 'success')
-        return redirect(url_for('list_surat_pengumuman'))
-    else:
-        flash('The file size exceeds 5 Mb.', 'error')
-        return redirect(url_for('list_surat_pengumuman'))
+    tanggal_to_datetime = datetime.strptime(tanggal_receiver, "%Y-%m-%d")
+    datetime_to_tanggal = tanggal_to_datetime.strftime('%d-%m-%Y')
+    print(tanggal_to_datetime)
+    print(datetime_to_tanggal)
+    surat = {
+        'nomor_surat':f'{kategori_receiver}/{nomor_surat_receiver}',
+        'kategori': kategori_receiver,
+        'tanggal':datetime_to_tanggal,
+        'tujuan': tujuan_receiver,
+        'perihal': perihal_receiver,
+        'pengirim':pengirim_receiver,
+        'keterangan':keterangan_receiver
+    }
+    print(lampiran_receiver)
+    filename = secure_filename(lampiran_receiver.filename) #secure file
+    file_path = f"letters/{kategori_receiver}_{nomor_surat_receiver}_{datetime_to_tanggal}_{filename}" #membuat path baru
+    lampiran_receiver.save(os.path.join(BASE_DIR+'/lexiarchiver/static/', file_path)) #menyimpan file
+    surat["lampiran"] = file_path #menambah key value
+    db.letters.insert_one(surat)
+    flash('The letter has been successfully saved.', 'success')
+    return redirect(url_for('list_surat_pengumuman'))
 
 @app.route("/surat-pengumuman/delete/<id>", methods=['GET'])
 def surat_pengumuman_delete(id):
@@ -587,7 +579,7 @@ def surat_pengumuman_update(id):
             filename = secure_filename(lampiran_receiver.filename) #secure file
             file_path = f"letters/{request.form['kategori']}_{request.form['nomor_surat']}_{datetime_to_tanggal}_{filename}" #membuat path baru
             print(file_path)
-            lampiran_receiver.save(os.path.join(BASE_DIR+'/lexiarchiver/static/', file_path)) #menyimpan file
+            lampiran_receiver.save('./static/'+ file_path) #menyimpan file
             data = {
                 'nomor_surat':f"SN/{request.form['nomor_surat']}",
                 'kategori':request.form['kategori'],
@@ -627,7 +619,105 @@ def profile():
 
 @app.route("/edit-profile")
 def edit_profile():
-    pass
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(
+            token_receive, SECRET_KEY,algorithms=['HS256']
+        )
+        user_info=db.users.find_one({'username':payload.get('id')})
+        return render_template('editprofile.html',user_info=user_info)
+    except(jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for('dashboard'))
+    
 
+@app.route("/test", methods=['GET', 'POST'])
+def test():
+    if request.method == 'POST':
+        photo=request.files['fileku']
+        filename = secure_filename(photo.filename)
+        photo.save('image/'+filename)
+        data = {
+            'name':'afif',
+            'photo': 'image/'+filename
+        }
+        db.test.insert_one(data)
+        return redirect('/test')
+    obj = db.test.find_one({'name':'afif'})
+    return render_template('test.html', obj=obj)
+
+    
+@app.route("/edit-profile-save-image", methods=['POST'])
+def edit_profile_image():
+    now = dt.datetime.now()
+    formatted_date = now.strftime('%Y-%m-%d %H:%M:%S')
+    formatted_date=formatted_date.replace(' ','_')
+    formatted_date=formatted_date.replace('-','_')
+    formatted_date=formatted_date.replace(':','_')
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        username = payload["id"]
+
+        # CHECK FILE SIZE
+        first_name = request.form['firstname']
+        last_name = request.form['lastname']
+        bio = request.form['bio']
+        city = request.form['city']
+        photo = request.files['profile-picture']
+
+        # photo.save('/tmp/foo')
+        # file_size = os.stat('/tmp/foo').st_size
+        extension_file = photo.filename.split(".")[-1]
+        if extension_file not in ALLOWED_IMAGE:
+            flash('The file must be .jpg, .jpeg, and .png ', 'error')
+            return redirect(url_for('profile'))
+        file = request.files["profile-picture"] #masukan file dalam variable
+        filename = secure_filename(file.filename)
+        extension = filename.split(".")[-1]
+        new_doc = {
+                "first_name": first_name, "last_name": last_name,
+                'bio':bio,'city':city
+                }
+        if "profile-picture" in request.files:
+            file = request.files["profile-picture"] #masukan file dalam variable
+            filename = secure_filename(file.filename)#secure file
+            filename.replace("-",'_')
+            extension = filename.split(".")[-1] #mengambil extension
+            file_path = f"profile_pics/{username}_{formatted_date}.{extension}" #membuat path baru
+            file.save("./static/" + file_path) #menyimpan file
+            new_doc["photo"] = file_path
+        db.users.update_one({"username": payload["id"]}, {"$set": new_doc})
+        return redirect('/profile')
+
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+    
+@app.route("/edit-profile-security", methods=['POST'])
+def edit_profile_security():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(
+            token_receive, SECRET_KEY,algorithms=['HS256']
+        )
+        email = request.form['email']
+        phone = request.form['phone']
+        password1 = request.form['password1']
+        password2 = request.form['password2']
+
+        if password1==password2:
+            password_hash = hashlib.sha256(password1.encode('utf-8')).hexdigest()
+            data = {
+                'email':email,
+                'password':password_hash,
+                'phone':phone
+            }
+            db.users.update_one({"username": payload["id"]}, {"$set": data})
+            flash("Profile successfully changed", 'success')
+            return redirect('/profile')
+        else:
+            flash("Password and Confirm Password do not match", 'error')
+            return redirect('/profile')
+    except(jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for('dashboard'))
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

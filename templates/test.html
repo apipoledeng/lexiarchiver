@@ -8,13 +8,11 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
+    <img src="{{url_for('static', filename=obj.photo)}}" alt="">
     <form action="/test", method="POST" enctype="multipart/form-data">
         <label for="">File</label>
         <input type="file" name="fileku">
         <button >Submit</button>
     </form>
-    <script>
-        alert('{{msg}}')
-    </script>
 </body>
 </html>

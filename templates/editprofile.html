@@ -26,7 +26,6 @@
             background-color: #ffffff;
             border-radius: 20px;
             display: flex;
-            justify-content: space-between;
         }
 
         .photo {
@@ -51,38 +50,24 @@
             top: 96px;
         }
 
-        .btn-1 {
+        .input-foto {
             position: absolute;
-            width: 140px;
-            height: 42px;
+            width: 250px;
+            height: 35px;
             left: 269px;
             top: 164px;
-            border-radius: 50px;
             border: 0.5px solid #0E4B5F;
             background-color: #0E4B5F;
             color: #ffffff;
             font-family: 'Kelly Slab';
             font-style: normal;
             font-weight: 400;
-            font-size: 24px;
+            font-size: 14px;
             line-height: 20px;
-        }
-
-        .btn-2 {
-            position: absolute;
-            width: 140px;
-            height: 52px;
-            left: 415px;
-            top: 164px;
-            border-radius: 50px;
-            border: none;
-            background-color: #ffffff;
-            color: black;
-            font-family: 'Kelly Slab';
-            font-style: normal;
-            font-weight: 400;
-            font-size: 24px;
-            line-height: 20px;
+            text-align: center;
+            align-items: center;
+            padding-top: 3px;
+            padding-left: 2px;
         }
 
         .personal {
@@ -189,22 +174,6 @@
             color: #0E4B5F;
         }
 
-        .change {
-            position: absolute;
-            width: 148px;
-            height: 34px;
-            left: 1070px;
-            top: 120px;
-            border: none;
-            background-color: #ffffff;
-
-            font-family: 'Libre Bodoni';
-            font-style: normal;
-            font-weight: 400;
-            font-size: 20px;
-            line-height: 20px;
-        }
-
         .btn-save-password {
             position: absolute;
             width: 99px;
@@ -233,78 +202,78 @@
 
 <body>
     <div class="content">
-        <div class="edit-foto">
-            <h6 class="photo">Photo Setting</h6>
-            <img src="../static/profile.png" alt="foto profil">
-            <button type="submit" class="btn-1">Change</button>
-            <button type="submit" class="btn-2">Remove</button>
-        </div>
+        <form action="/edit-profile-save-image" enctype="multipart/form-data" method="POST">
+            <div class="edit-foto">
+                <h6 class="photo">Photo Setting</h6>
+                <img src="{{url_for('static', filename=user_info.photo)}}" style="border-radius: 100px;" alt="foto profil">
+                <input type="file" class="input-foto" name="profile-picture">
+            </div>
+    
+            <div class="personal-infomation">
+                <h6 class="personal">Personal Information</h6>
+                <div class="form-grid">
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="firstname" class="form-label">First Name</label>
+                                <input type="text" class="form-control" name="firstname" value="{{user_info.first_name}}">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" class="form-control" name="city" value="{{user_info.city}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="lastname" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" name="lastname" value="{{user_info.last_name}}">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="bio" class="form-label">Bio</label>
+                                <input type="text" class="form-control" name="bio" value="{{user_info.bio}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <a type="submit" href="/profile" class="btn-cancel">Cancel</a>
+                            <button type="submit" class="btn-save">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
 
-        <div class="personal-infomation">
-            <h6 class="personal">Personal Information</h6>
-            <form class="form-grid">
-                <div class="row">
-                    <div class="col">
-                        <div class="mb-3">
-                            <label for="firstname" class="form-label">First Name</label>
-                            <input type="text" class="form-control" id="firstname">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="mb-3">
-                            <label for="city" class="form-label">City</label>
-                            <input type="text" class="form-control" id="city">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="mb-3">
-                            <label for="lastname" class="form-label">Last Name</label>
-                            <input type="text" class="form-control" id="lastname">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="mb-3">
-                            <label for="bio" class="form-label">Bio</label>
-                            <input type="text" class="form-control" id="bio">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <button type="submit" class="btn-cancel">Cancel</button>
-                        <button type="submit" class="btn-save">Save</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-
-        <div class="security">
-            <h6 class="title-security">Security</h6>
-            <div class="form">
-                <form>
+        <form action="/edit-profile-security" method="POST">
+            <div class="security" style="padding-right: 101px;padding-top: 20px;">
+                <h6 class="title-security">Security</h6>
+                <div class="form">
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Email address</label>
-                        <input type="email" class="form-control" id="email-addres">
-                        <button type="submit" class="change">Change E-mail</button>
+                        <input type="email" class="form-control" name="email" value="{{user_info.email}}">
                     </div>
                     <div class="mb-3">
                         <label for="nohp" class="form-label">Nomor Telepon</label>
-                        <input type="number" class="form-control" id="nohp">
+                        <input type="text" class="form-control" name="phone" value="{{user_info.phone}}">
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">New Password</label>
-                        <input type="password" class="form-control" id="password1">
+                        <input type="password" class="form-control" name="password1">
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Confirmation Password</label>
-                        <input type="password" class="form-control" id="password2">
+                        <input type="password" class="form-control" name="password2">
                     </div>
-                    <button type="submit" class="btn-save-password">Save</button>
-                </form>
+                    <button type="submit" class="btn-save-password" style="margin-top: 37px;">Save</button>
+                </div>
             </div>
-        </div>
+        </form>
     </div>
 </body>
 
