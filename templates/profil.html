@@ -35,7 +35,6 @@
         function sign_out() {
             $.removeCookie("mytoken", { path: "/" });
             alert("Logged out!");
-            
             window.location.href = "/login";
         }
 
@@ -90,7 +89,6 @@
                 </div>
                 <div class="img2">
                     <img src="{{url_for('static', filename=user_info.photo)}}" style="border-radius: 100px;" alt="">
-                    <!-- <img src="../static/image/fabio-tura-eNDidEwl40g-unsplash.jpg" style="border-radius: 100px;" alt=""> -->
                 </div>
 
             </div>
